@@ -2,7 +2,7 @@
 \usepackage{ProjectPackageA22}
 \title{Guide d'utilisation de l'imprimante 3D
 \\\Large{\textit{MakerBot Method X}}}
-\shorttitle{Guide d'utilisation}
+\shorttitle{Guide d'utilisation - MakerBot}
 \author{Gérémy Michaud}{G. Michaud}
 \teacher{Luc Beaulieu}
 \teacher{Louis Archambault}
@@ -19,15 +19,92 @@
 \newpage
 \tableofcontents
 \clearpage
+
 \section{Introduction}
+L'impression 3D est une méthode révolutionnaire de fabrication qui permet de créer des objets physiques à partir de modèles numériques. Elle offre de nombreuses possibilités dans divers domaines tels que la conception de produits, l'architecture, la médecine et bien d'autres encore.
+
+Ce guide vise à vous fournir les instructions nécessaires pour réaliser un modèle 3D à l'aide d'une imprimante 3D MakerBot. Vous apprendrez comment préparer et imprimer votre modèle, ainsi que les étapes à suivre pour changer les filaments de matériau, remplacer l'extrudeur et remplacer la buse de l'extrudeur.
+
+La première section de ce guide explique en détail le processus de réalisation d'un modèle 3D à l'aide de l'application MakerBot CloudPrint. Vous découvrirez comment choisir ou créer un modèle, l'importer dans l'application, le préparer pour l'impression, et exporter les fichiers nécessaires sur une clé USB pour les charger dans l'imprimante 3D.
+
+La deuxième section aborde le processus de changement des filaments de matériau. Vous apprendrez comment décharger un matériau, nettoyer l'extrudeur, charger un nouveau matériau et effectuer les vérifications nécessaires avant de commencer une nouvelle impression.
+
+La troisième section vous guidera à travers les étapes pour changer l'extrudeur. Vous apprendrez comment retirer l'extrudeur existant, installer un nouvel extrudeur et effectuer le calibrage de l'imprimante.
+
+Enfin, la dernière section explique comment remplacer la buse de l'extrudeur. Vous découvrirez comment retirer la buse existante, remplacer le tube PTFE, insérer la nouvelle buse et assurer sa fixation correcte.
+
+Ce guide vous fournira toutes les informations nécessaires pour utiliser efficacement votre imprimante 3D MakerBot et obtenir des résultats de qualité. Suivez les étapes avec attention et n'hésitez pas à vous référer aux annexes pour des informations supplémentaires sur les paramètres d'impression recommandés et la compatibilité des matériaux avec les extrudeurs.
 
 \section{Réaliser un modèle 3D}
+\begin{enumerate}
+    \item Créez le modèle souhaité sur l'application de votre choix, comme Sketchup ou Autocad, ou téléchargez un modèle existant depuis \href{https://www.thingiverse.com/}{Internet}.
+    \item Enregistrez le modèle localement sur votre ordinateur au format \texttt{.stl}.
+    \item Accédez au site Web \href{https://login.makerbot.com/login?redirect=https%3A%2F%2Fcloudprint.makerbot.com%2Fprint}{MakerBot CloudPrint}.
+    \item Créez un compte si vous n'en avez pas déjà un.
+    \item Une fois connecté, cliquez sur \texttt{Print Preparation} en haut à gauche.
+    \item Importez votre modèle en cliquant sur \texttt{Upload}.
+    \item Vérifiez que vous avez sélectionné la bonne imprimante 3D et les bons matériaux de construction de support dans les paramètres de la barre supérieure.
+    \item Si nécessaire, redimensionnez votre modèle en utilisant l'option \texttt{Scale} de la barre d'outils située en bas de l'écran.
+    \item Il est recommandé d'utiliser les trois options suivantes de la barre d'outils dans cet ordre : \texttt{Center Model on Build Plate} (centrer le modèle sur le plateau d'impression) $\rightarrow$ \texttt{Smart Orient} (orientation intelligente) $\rightarrow$ \texttt{Smart Arrange} (agencement intelligent).
+    \item Appliquez les paramètres d'impression recommandés indiqués à l'Annexe \ref{annexe1}.
+    \item Obtenez un aperçu de l'impression en cliquant sur \texttt{Print Preview} en haut à droite.
+    \item Vérifiez qu'il n'y a pas d'irrégularités dans l'impression en visualisant l'option \texttt{Layer}.
+    \item Exportez les fichiers \texttt{.MAKERBOT} et \texttt{.THING} sur une clé USB en cliquant sur les trois points à côté du bouton \texttt{Export} en haut à droite de l'écran.
+\end{enumerate}
+Branchez la clé USB dans l'imprimante 3D MakerBot souhaitée et poursuivez avec le guide d'explication sur le fonctionnement de l'imprimante 3D.
 
 \section{Changer les filaments de matériau}
+\begin{enumerate}
+    \item Assurez-vous que votre imprimante 3D MakerBot Method X est allumée et prête à être utilisée.
+    \item Vérifiez que le plateau d'impression est vide et qu'aucun modèle d'impression ne s'y trouve. Si nécessaire, retirez tout objet ou reste de filament du plateau.
+    \item Commencez par accéder à l'interface de l'imprimante en utilisant l'écran tactile.
+    \item Cliquez sur l'icône des extrudeurs.
+    \item Une fois dans la vue des extrudeurs, vous verrez les extrudeurs actuellement chargés avec leurs matériaux respectifs.
+    \item Pour décharger le matériau, cliquez sur le bouton correspondant au matériau \texttt{Unload material} que vous souhaitez remplacer.
+    \item Une fois la température atteinte, l'imprimante vous invitera à retirer le filament actuellement chargé. Tirez doucement sur le filament pour le retirer de l'extrudeuse. Assurez-vous de ne pas tirer trop fort ou de secouer l'extrudeuse.
+    \item Choisissez l'option \texttt{Purge} pour nettoyer l'extrudeur avant de charger un nouveau matériau. Cela permettra de faire couler un peu de matériau à travers l'extrudeur pour éliminer tout résidu.
+    \item Attendez que l'extrudeur atteigne la température requise pour le nouveau matériau. Vous pouvez surveiller la température sur l'écran.
+    \item Une fois la température atteinte, le matériau commencera à s'écouler de l'extrudeur.
+    \item Assurez-vous que le matériau s'écoule correctement et sans problèmes.
+    \item Une fois que vous êtes satisfait du flux de matériau, appuyez sur le bouton \texttt{Confirmer} pour arrêter la purge.
+    \item Prenez le nouveau filament que vous souhaitez charger. Coupez l'extrémité du filament de manière à obtenir une extrémité propre et droite.\\
+    \textit{*Assurez-vous que le matériau est compatible avec l'extrudeur. (voir Annexe \ref{annexe2})}
+    \item Insérez l'extrémité du nouveau filament dans l'ouverture de l'extrudeuse. Poussez doucement le filament jusqu'à ce qu'il soit bien engagé dans le tube d'alimentation et qu'il commence à sortir de la buse.
+    \item L'imprimante commencera automatiquement à charger le nouveau filament. Attendez que le filament soit complètement chargé et qu'il soit extrudé de manière constante.
+    \item Une fois que le nouveau filament est correctement chargé, vous pouvez appuyer sur le bouton de confirmation sur l'écran tactile pour finaliser le processus de changement de filament.
+    \item L'imprimante effectuera quelques opérations supplémentaires pour s'assurer que le nouveau filament est bien en place. Attendez que ces opérations se terminent.
+    \item Une fois toutes les opérations terminées, vous pouvez commencer une nouvelle impression avec le filament nouvellement chargé.
+\end{enumerate}
 
 \section{Changer l'extrudeur}
+\begin{enumerate}
+    \item Avant de procéder au changement d'extrudeur, assurez-vous d'avoir retiré préalablement le filament de matériau tel qu'expliqué à l'étape suivante.
+    \item Commencez par accéder à l'interface de l'imprimante en utilisant l'écran tactile.
+    \item Cliquez sur l'icône des extrudeurs.
+    \item Une fois dans la vue des extrudeurs, vous verrez les extrudeurs actuellement chargés avec leurs matériaux respectifs.
+    \item Choisissez l'option \texttt{Purge} pour nettoyer l'extrudeur avant de les retirer. Cela permettra de faire couler un peu de matériau à travers l'extrudeur pour éliminer tout résidu.
+    \item Attendez que l'extrudeur atteigne la température requise pour le nouveau matériau. Vous pouvez surveiller la température sur l'écran.
+    \item Une fois la température atteinte, le matériau commencera à s'écouler de l'extrudeur.
+    \item Assurez-vous que le matériau s'écoule correctement et sans problèmes.
+    \item Une fois que vous êtes satisfait du flux de matériau, appuyez sur le bouton \texttt{Confirmer} pour arrêter la purge.
+    \item Détachez maintenant les tubes d'alimentation de matériau et retirez l'extrudeur en place.
+    \item Placez le nouvel extrudeur en prenant soin de bien le verrouiller en place.
+    \item Fixez les tubes d'alimentation de filament au nouvel extrudeur.
+    \item Effectuez ensuite un calibrage de l'imprimante.
+    \item Chargez le nouveau matériau dans l'extrudeur.
+\end{enumerate}
 
 \section{Remplacer la buse de l'extrudeur}
+\begin{enumerate}
+    \item Assurez-vous que l'extrudeuse est encore chaude. Cela facilite le retrait de la buse, car le plastique chaud n'agit pas comme de la colle entre le cœur de l'extrudeuse et la buse. Utilisez des gants de travail en tissu pour manipuler l'extrudeuse chaude et éviter les brûlures.
+    \item Desserrez la vis de fixation qui maintient la buse en place. Tournez la vis d'environ 5 tours complets pour la libérer. La vis ne doit pas être complètement retirée du trou.
+    \item Insérez l'outil de démontage de la buse dans les rainures situées sous la buse. Une fois inséré, utilisez l'outil pour détacher la buse. Vous pouvez ensuite tirer la buse hors de l'extrudeuse.
+    \item Après avoir retiré la buse, laissez l'extrudeuse refroidir jusqu'à ce qu'elle soit froide au toucher. Utilisez l'extrémité fine de l'outil de démontage pour accéder au tube PTFE, puis retirez-le de l'arrière de l'extrudeuse.
+    \item Pliez l'extrémité du nouveau tube PTFE et insérez-le dans l'extrudeuse.
+    \item Lorsque le tube PTFE est à l'intérieur de l'extrudeuse, la nouvelle buse peut être insérée. Assurez-vous que le tube PTFE s'étend vers l'extérieur, car cela contribue à créer l'étanchéité de l'extrudeuse. Utilisez l'extrémité fine de l'outil de démontage de la buse pour plier les parties du tube. Une fois qu'elles sont toutes pliées vers l'extérieur, poussez la buse de l'extrudeuse vers l'intérieur.
+    \item Utilisez une surface plane pour appuyer sur la buse et vous assurer qu'elle est bien en place. N'utilisez pas de surface dure en acier, en pierre ou en formica, car cela pourrait l'endommager. Le bois ou le plastique conviennent.
+    \item La vis de fixation est une vis M3 et n'a pas besoin d'être serrée excessivement. Un serrage excessif peut facilement endommager les filets en aluminium. Serrez la vis à la main pour garantir que la buse est bien fixée.
+\end{enumerate}
 
 \newpage
 \appendix
