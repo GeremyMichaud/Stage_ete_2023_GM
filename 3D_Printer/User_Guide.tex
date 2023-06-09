@@ -1,0 +1,79 @@
+\documentclass{Thesis}
+\usepackage{ProjectPackageA22}
+\title{Guide d'utilisation de l'imprimante 3D
+\\\Large{\textit{MakerBot Method X}}}
+\shorttitle{Guide d'utilisation}
+\author{Gérémy Michaud}{G. Michaud}
+\teacher{Luc Beaulieu}
+\teacher{Louis Archambault}
+\usepackage{pifont}
+\usepackage{multicol}
+\usepackage{setspace}
+\usepackage{color, colortbl}
+\usepackage{floatrow}
+\floatsetup[table]{capposition=top}
+\definecolor{Gray}{gray}{0.6}
+\definecolor{LGray}{gray}{0.9}
+
+\begin{document}
+\newpage
+\tableofcontents
+\clearpage
+\section{Introduction}
+
+\section{Réaliser une impression 3D}
+
+\section{Changer les filaments de matériau}
+
+\section{Changer l'extrudeur}
+
+\section{Remplacer la buse de l'extrudeur}
+
+\newpage
+\appendix
+\section{Annexe A: Paramètres d'impression recommandés}
+\label{annexe1}
+\textbf{Print Mode} : Balanced \\
+\textbf{Layer Height (mm)} : 0.203 \\
+\textbf{Infill Density (\% Filled)} : Between 10 and 30 \\
+\textbf{Number of Shells} : 2 \\
+\textbf{Support Type} : Dissolvable - Tapered (si le support est nécessaire)\\
+\textbf{Base Layer} : Raft
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\done}{\rlap{$\square$}{\raisebox{2pt}{\large\hspace{1pt}\cmark}}}
+\begin{itemize}
+    \setlength\itemsep{1mm}
+    \item[\done] Purge Early End
+    \item[\done] Purge Tower
+\end{itemize}
+\textbf{Purge Tower Shape} : ZigZag (sélectionné après l'importation et le dimensionnement de l'impression pour se placer correctement) \\
+\textbf{Model Infill Pattern} : Diamond
+
+\section{Annexe B: Compatibilité des extrudeurs}
+\label{annexe2}
+\begin{table}[htb!]
+    \centering
+    \begin{tabular}{>{\centering\arraybackslash}p{4cm}|>{\centering\arraybackslash}p{8cm}}
+    \hline \hline
+        \textbf{Extrudeur} & \textbf{Matériau}\\ \hline \hline
+        \multirow{4}{*}{1$A$} & PLA\\
+        & TOUGH\\
+        & PET-G\\
+        & NYLON\\ \hline
+        \multirow{4}{*}{1$X_A$} & ABS-R\\
+        & ABS\\
+        & PC-ABS\\
+        & PC-ABS-FR\\ \hline
+        \multirow{5}{*}{1$C$} & NYLON CARBON FIBER\\
+        & NYLON 12 CARBON FIBER\\
+        & ABS\\
+        & PC-ABS\\
+        & PC-ABS-FR\\ \hline
+        2$A$ & PVA\\ \hline
+        \multirow{2}{*}{2$X_A$} & RAPID RINSE\\
+        & SR-30\\ \hline
+    \end{tabular}
+    \captionof{table}[]{Compatibilité des extrudeurs avec les matériaux d'impression.\label{tab:compat_material}}
+\end{table}
+
+\end{document}
