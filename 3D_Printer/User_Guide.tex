@@ -49,9 +49,14 @@ Ce guide vous fournira toutes les informations nécessaires pour utiliser effica
     \item Appliquez les paramètres d'impression recommandés indiqués à l'Annexe \ref{annexe1}.
     \item Obtenez un aperçu de l'impression en cliquant sur \texttt{Print Preview} en haut à droite.
     \item Vérifiez qu'il n'y a pas d'irrégularités dans l'impression en visualisant l'option \texttt{Layer}.
-    \item Exportez les fichiers \texttt{.MAKERBOT} et \texttt{.THING} sur une clé USB en cliquant sur les trois points à côté du bouton \texttt{Export} en haut à droite de l'écran.
+    \item Exportez les fichiers \texttt{.MAKERBOT} et \texttt{.THING} sur une clé USB en cliquant sur les trois points à côté du bouton \texttt{Export} en haut à droite de l'écran.\\
+        Les fichiers \texttt{.MAKERBOT} sont les seuls types de fichiers pris en charge par les imprimantes 3D de la société MakerBot. En d'autres termes, ces fichiers sont nécessaires pour imprimer votre modèle.\\
+        D'autre part, les fichiers \texttt{.THING} sont utilisés pour modifier rapidement le modèle dans l'interface de MaKerBot Cloud. Ils contiennent des informations telles que les dimensions, l'orientation, les paramètres d'impression et d'autres détails pertinents pour le modèle.
+    \item Branchez la clé USB dans l'imprimante 3D MakerBot Method X.
+    \item \label{print}Dans le menu de l'imprimante, accédez à l'onglet \texttt{Print}.
+    \item \label{USB}Sélectionnez \texttt{USB storage} et choisissez le modèle enregistré précédemment sur votre clé USB.\\
+        Si l'imprimante ne détecte pas immédiatement un fichier imprimable, laissez la clé USB branchée, revenez au menu principal de l'imprimante, puis répétez les étapes \ref{print} et \ref{USB}.
 \end{enumerate}
-Branchez la clé USB dans l'imprimante 3D MakerBot souhaitée et poursuivez avec le guide d'explication sur le fonctionnement de l'imprimante 3D.
 
 \section{Changer les filaments de matériau}
 \begin{enumerate}
@@ -110,7 +115,9 @@ Branchez la clé USB dans l'imprimante 3D MakerBot souhaitée et poursuivez avec
 \appendix
 \section{Annexe A: Paramètres d'impression recommandés}
 \label{annexe1}
-\textbf{Print Mode} : Balanced \\
+\textbf{Print Mode} : Balanced
+
+\underline{\textbf{Quick Settings}}\\
 \textbf{Layer Height (mm)} : 0.203 \\
 \textbf{Infill Density (\% Filled)} : Between 10 and 30 \\
 \textbf{Number of Shells} : 2 \\
@@ -118,14 +125,19 @@ Branchez la clé USB dans l'imprimante 3D MakerBot souhaitée et poursuivez avec
 \textbf{Base Layer} : Raft
 \newcommand{\cmark}{\ding{51}}
 \newcommand{\done}{\rlap{$\square$}{\raisebox{2pt}{\large\hspace{1pt}\cmark}}}
+
+\underline{\textbf{More Settings $\rightarrow$ Printer}}\\
+\textbf{Purge Tower Shape} : ZigZag (sélectionné après l'importation et le dimensionnement de l'impression pour se placer correctement)
 \begin{itemize}
     \setlength\itemsep{1mm}
     \item[\done] Purge Early End
     \item[\done] Purge Tower
 \end{itemize}
-\textbf{Purge Tower Shape} : ZigZag (sélectionné après l'importation et le dimensionnement de l'impression pour se placer correctement) \\
+
+\underline{\textbf{More Settings $\rightarrow$ Infill}}\\
 \textbf{Model Infill Pattern} : Diamond
 
+\newpage
 \section{Annexe B: Compatibilité des extrudeurs}
 \label{annexe2}
 \begin{table}[htb!]
