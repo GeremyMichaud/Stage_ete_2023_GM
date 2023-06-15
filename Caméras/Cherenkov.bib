@@ -1,297 +1,277 @@
-
-@thesis{cloutier_utilisation_2022,
-	location = {Québec},
-	title = {Utilisation de la radioluminescence pour la conception de dosimètres optiques déformables},
-	url = {http://hdl.handle.net/20.500.11794/73768},
-	abstract = {Les traitements modernes de radiothérapie administrent la dose nécessaire à l'éradication de la région tumorale par un enchaînement complexe de faisceaux personnalisés selon l'anatomie de chaque patient. La distribution de dose résultante présente donc de forts gradients qui visent à maximiser l'irradiation de la maladie tout en limitant l'exposition des tissus sains. Or, les déformations et mouvements anatomiques que présentent certains patients viennent modifier la géométrie attendue et peuvent réduire la qualité escomptée du traitement. Dans ce contexte, le besoin d'outils permettant la quantification de la dose en présence de déformations est grandissant. Utilisant à profit les qualités uniques démontrées des dosimètres optiques, la thèse présentée vise le développement d'une nouvelle génération de dosimètres pensée pour la dosimétrie déformable. Entre autres, il sera montré que le dosimètre développé permet une mesure simultanée de la dose et de la déformation, ce qui ouvre la voie à la validation expérimentale d'algorithmes de recalage d'images déformables. Les contributions de la thèse se déploient principalement selon trois volets : la caractérisation des défis liés à l'utilisation de différentes sources de signaux radioluminescents, en particulier la radiation Cherenkov et la scintillation ; le développement de techniques de détection adaptées, telles que l'imagerie polarisée, l'imagerie spectrale et la triangulation stéréoscopique ; puis le développement d'un dosimètre déformable utilisant ces signaux pour la mesure simultanée de la dose et de la déformation. D'abord, la directionalité de l'émission Cherenkov a été caractérisée de pair avec l'imagerie polarisée. Le rayonnement Cherenkov est une émission lumineuse directement produite dans l'eau, le milieu de référence, suite à son irradiation. Or, les photons optiques sont émis selon un cône dont l'angle et l'orientation sont déterminés par l'énergie du faisceau et sa direction, lesquels varient grandement dans un fantôme. Ainsi, l'imagerie polarisée a été étudiée comme solution à l'utilisation du signal Cherenkov pour des mesures précises de la dose. En utilisant l'imagerie polarisée, la contribution polarisée du signal a été associée à la directionnalité du rayonnement qui a alors pu être corrigée. Ainsi, des écarts lors de mesures de dose atteignant jusqu'à 60\% avec les valeurs attendues ont été réduits à moins de 3\% en moyenne. Il a d'ailleurs été montré que l'état de polarisation du signal Cherenkov peut être utilisé pour le discriminer d'un signal de scintillation. Ainsi, les deux premières études présentées au sein de cette thèse montrent que des mesures précises ({\textless} 3\%) de la dose, directement dans l'eau (le milieu de référence), peuvent être réalisées en utilisant le signal Cherenkov combiné à l'imagerie polarisée. Concernant l'utilisation de caméras pour la mesure de signaux radioluminescents, il a été montré qu'il est possible d'allier la grande résolution spatiale de ces photodétecteurs à une résolution spectrale. Les caméras polychromatiques utilisant un patron de Bayer, par exemple, collectent la lumière avec plusieurs milliers de pixels sur lesquels des filtres colorés sont apposés de sorte à former une mosaïque. Ainsi, ces caméras mesurent la lumière selon un canal rouge, vert et bleu. En utilisant les techniques de dématriçage appropriées, il est possible d'interpoler l'information spectrale manquante à chaque pixel. Ainsi, le formalisme hyperspectral, initialement développé pour des mesures en un point, peut être appliqué à des mesures de plus grande résolution spatiale. Ainsi, il a été montré que l'utilisation d'un kernel bilinéaire pour le dématriçage d'une caméra polychromatique utilisant un filtre de Bayer permet d'isoler les signaux Cherenkov et de scintillation avec une précision de 1\%. Enfin, un dosimètre déformable permettant la mesure simultanée de la dose et de la déformation a été développé. Le système comprend un fantôme cylindrique transparent au sein duquel un réseau de 19 scintillateurs a été intégré. Le système comprend également un ensemble de 2 paires de caméras stéréoscopiques qui permet le suivi en 3D de la position des extrémités de chacun des scintillateurs. En conséquence, le système permet le suivi de la déformation avec une exactitude et une précision de respectivement 0.08 mm et 0.3 mm. Le suivi 3D de la position permet aussi la correction des variations de signal qui ne sont pas proportionnelles à la dose, mais plutôt au couplage des fibres avec la caméra. Le dosimètre a également permis la mesure de la dose en accord à 1\% près avec celle prédite par un logiciel de planification de traitement et un système dosimétrique complémentaire. Ainsi, la thèse a permis le développement d'un premier dosimètre mesurant simultanément la dose et la déformation, permettant une comparaison avec un algorithme de recalage d'image déformable. Ce faisant, l'exploration d'une nouvelle voie d'application de la scintillation a, de plus, mené à l'avancement des connaissances en dosimétrie optique.
-
-
-Modern radiotherapy treatments deliver the dose to the target through a complex sequence of beams customized to the anatomy of each patient. The resulting dose distribution therefore has strong gradients that aim to maximize disease irradiation while limiting exposure of healthy tissue. However, the anatomical deformations and movements that some patients present modify the expected geometry and may potentially reduce the quality of the treatment. In this context, there is a growing need for tools able of measuring dose in the presence of deformations. Taking advantage of the unique qualities of optical dosimeters, the presented thesis aims at developing a new generation of dosimeters designed for deformable dosimetry. Enabling simultaneous measurements of dose and deformation, this dosimeter could also be used for the validation of deformable image registration algorithms. The contributions of the thesis are threefold: the characterization of the challenges related to the use of different sources of radioluminescent signals, in particular Cherenkov radiation and scintillation; the development of appropriate detection techniques, such as polarized imaging, spectral imaging and stereo triangulation; and then the development of a deformable dosimeter using these signals for the simultaneous measurement of dose and deformation. First, the directionality of Cherenkov emission was characterized using polarized imaging. Cherenkov radiation is a light emission directly produced in water, the reference medium for beam monitoring. Cherenkov photons are emitted in a cone whose angle and orientation are determined by the beam energy and direction, which vary greatly in a phantom. Thus, polarized imaging has been investigated as a solution enabling the use of Cherenkov emission for accurate dose measurements. By using polarization imaging, the polarized contribution of the signal was associated with the directionality of the radiation, which could then be corrected. Thus, deviations in dose measurements previously up to 60\% from the expected values were reduced under 3\% on average. It has also been shown that the polarization state of the Cherenkov signal can be used to discriminate it from a scintillation signal. Thus, the first two studies presented in this thesis show that accurate measurements, without disturbing the reference medium, can be made using the Cherenkov signal combined with polarization imaging. Concerning the use of cameras for the measurement of radioluminescent signals, it has been shown that it is possible to combine the high spatial resolution of these photodetectors with a spectral resolution. Polychromatic cameras using a Bayer pattern, for example, collect light with several thousand pixels on which colored filters are affixed to form a mosaic. Thus, these cameras measure the light according to a red, green and blue channel. By using appropriate demosaicing techniques, it is possible to interpolate the missing spectral information at each pixel. Thus, the hyperspectral formalism, initially developed for single point measurements, can be applied to higher spatial resolution measurements. Among others, the use of a bilinear kernel for dematrixing a polychromatic camera using a Bayer filter allows to isolate Cherenkov and scintillation signals with an accuracy of 1\%. Finally, a deformable dosimeter allowing the simultaneous measurement of dose and deformation has been developed. The system includes a transparent cylindrical phantom in which an array of 19 scintillators has been integrated. The system also includes a set of 2 pairs of stereo cameras that allows the 3D tracking of the position of each scintillator ends. As a result, the system allows the 3D tracking of the deformation with an accuracy and accuracy of 0.08 mm and 0.3 mm respectively. This 3D position tracking also allows the correction of signal variations that are not proportional to the dose, but rather to the coupling of the fibers with the camera. The dosimeter also allowed measurement of the dose in agreement within 1\% of the dose predicted by a treatment planning software and a complementary dosimetric system. Thus, the thesis allowed the development of a first dosimeter measuring simultaneously the dose and the deformation, allowing a comparison with a deformable image registration algorithm. In doing so, the exploration of a new application of scintillation has also led to the advancement of knowledge in optical dosimetry},
-	pagetotal = {194},
-	institution = {Université Laval},
-	type = {phdthesis},
-	author = {Cloutier, Emily},
-	date = {2022},
-	file = {Cloutier - 2022 - Utilisation de la radioluminescence pour la concep.pdf:C\:\\Users\\Gérémy\\Zotero\\storage\\Y9EPGVEZ\\Cloutier - 2022 - Utilisation de la radioluminescence pour la concep.pdf:application/pdf},
+@article{ashrafDosimetryFLASHRadiotherapy2020,
+  title = {Dosimetry for {{FLASH Radiotherapy}}: {{A Review}} of {{Tools}} and the {{Role}} of {{Radioluminescence}} and {{Cherenkov Emission}}},
+  shorttitle = {Dosimetry for {{FLASH Radiotherapy}}},
+  author = {Ashraf, Muhammad Ramish and Rahman, Mahbubur and Zhang, Rongxiao and Williams, Benjamin B. and Gladstone, David J. and Pogue, Brian W. and Bruza, Petr},
+  date = {2020-08-21},
+  journaltitle = {Frontiers in Physics},
+  shortjournal = {Front. Phys.},
+  volume = {8},
+  pages = {328},
+  issn = {2296-424X},
+  doi = {10.3389/fphy.2020.00328},
+  url = {https://www.frontiersin.org/article/10.3389/fphy.2020.00328/full},
+  urldate = {2023-05-23},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\FM5I9F6W\\Ashraf et al. - 2020 - Dosimetry for FLASH Radiotherapy A Review of Tool.pdf}
 }
 
-@thesis{jean_developpement_2022,
-	location = {Québec},
-	title = {Développement d'un dosimètre hybride alliant la scintillation et la radiation Čerenkov},
-	abstract = {Cette thèse porte sur le développement d'un détecteur hybride alliant la scintillation à la radiation Čerenkov pour une utilisation en radiothérapie. Bien que les dosimètres à scintillation aient déjà fait leurs preuves pour une mesure de dose précise dans des conditions d'irradiation complexes et variées, la radiation Čerenkov a pour l'instant peu d'applications en raison de ses multiples dépendances. Cette émission lumineuse résulte du passage de particules chargées ayant une vitesse supérieure à la lumière dans un milieu diélectrique et peut être observée lors de l'irradiation des dosimètres à scintillation plastiques. Alors que l'approche conventionnelle en dosimétrie à scintillation consiste à traiter ce signal comme un bruit en raison de sa dépendance angulaire, plusieurs recherches visaient à utiliser sa dépendance à l'énergie des électrons pour effectuer une mesure de dose. L'approche préconisée dans cette thèse est différente puisque le but est de mettre à profit cette émission intrinsèque en utilisant sa dépendance angulaire pour effectuer une mesure de l'angle incident des particules ionisantes utilisées en radiothérapie. Le projet couvre donc l'ensemble des théories nécessaires à la compréhension des multiples phénomènes physiques en jeu ainsi que les étapes de la conception, la caractérisation, la mise en application et la validation du détecteur. En ce qui concerne la conception, les hypothèses de départ se basent sur l'analyse des mécanismes derrière la production et la transmission des photons optiques Čerenkov dans une fibre optique. Par la suite, une étude des différents composants disponibles et configurations possibles afin de produire un premier prototype fonctionnel est présentée. Le choix du photodétecteur nécessaire à la mesure de l'intensité des différents signaux lumineux est également accompagné d'une étude comparative afin de sélectionner celui dont les caractéristiques sont optimales pour la réalisation du projet. Ensuite, les différents travaux expérimentaux démontrent la mise en application du prototype composé d'un dosimètre à scintillation et d'un détecteur Čerenkov. Ils valident ainsi le principe de fonctionnement du détecteur hybride par la réalisation de mesures simultanées de la dose et de l'angle d'irradiation, mais couvrent également la caractérisation angulaire et dosimétrique du prototype. Enfin, des travaux de simulations Monte Carlo valident les différentes observations faites en plus d'aider à la compréhension des liens existants entre les multiples dépendances de la radiation Čerenkov et la précision du détecteur. Une dernière section est finalement consacrée à l'optimisation du détecteur en vue d'améliorer sa conception. Celle-ci présente des pistes de solutions aux diverses limitations du prototype développé. La thèse fournit ainsi les bases nécessaires afin de guider le détecteur vers une application clinique.},
-	pagetotal = {154},
-	institution = {Université Laval},
-	type = {phdthesis},
-	author = {Jean, Emilie},
-	date = {2022},
-	file = {Jean - 2022 - Développement d'un dosimètre hybride alliant la sc.pdf:C\:\\Users\\Gérémy\\Zotero\\storage\\YWN4DH7M\\Jean - 2022 - Développement d'un dosimètre hybride alliant la sc.pdf:application/pdf},
+@article{beaulieuReviewPlasticLiquid2016,
+  title = {Review of Plastic and Liquid Scintillation Dosimetry for Photon, Electron, and Proton Therapy},
+  author = {Beaulieu, Luc and Beddar, Sam},
+  date = {2016-10-21},
+  journaltitle = {Physics in Medicine and Biology},
+  shortjournal = {Phys. Med. Biol.},
+  volume = {61},
+  number = {20},
+  pages = {R305-R343},
+  issn = {0031-9155, 1361-6560},
+  doi = {10.1088/0031-9155/61/20/R305},
+  url = {https://iopscience.iop.org/article/10.1088/0031-9155/61/20/R305},
+  urldate = {2023-05-23},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\4EIABQ97\\Beaulieu et Beddar - 2016 - Review of plastic and liquid scintillation dosimet.pdf}
 }
 
-@collection{beddar_scintillation_2016,
-	location = {Boca Raton London New York},
-	title = {Scintillation dosimetry},
-	isbn = {978-1-4822-0899-3},
-	series = {Imaging in medical diagnosis and therapy},
-	pagetotal = {416},
-	publisher = {{CRC} Press, Taylor \& Francis Group},
-	editor = {Beddar, Sam and Beaulieu, Luc},
-	date = {2016},
-	file = {1 Scintillation Dosimetry.pdf:C\:\\Users\\Gérémy\\Zotero\\storage\\34L92EN5\\1 Scintillation Dosimetry.pdf:application/pdf},
+@article{beddarCerenkovLightGenerated1992,
+  title = {Cerenkov Light Generated in Optical Fibres and Other Light Pipes Irradiated by Electron Beams},
+  author = {Beddar, A S and Mackie, T R and Attix, F H},
+  date = {1992-04-01},
+  journaltitle = {Physics in Medicine and Biology},
+  shortjournal = {Phys. Med. Biol.},
+  volume = {37},
+  number = {4},
+  pages = {925--935},
+  issn = {0031-9155, 1361-6560},
+  doi = {10.1088/0031-9155/37/4/007},
+  url = {https://iopscience.iop.org/article/10.1088/0031-9155/37/4/007},
+  urldate = {2023-06-13},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\JRJJJFTA\\Beddar et al. - 1992 - Cerenkov light generated in optical fibres and oth.pdf}
 }
 
-@article{ashraf_dosimetry_2020,
-	title = {Dosimetry for {FLASH} Radiotherapy: A Review of Tools and the Role of Radioluminescence and Cherenkov Emission},
-	volume = {8},
-	issn = {2296-424X},
-	url = {https://www.frontiersin.org/article/10.3389/fphy.2020.00328/full},
-	doi = {10.3389/fphy.2020.00328},
-	shorttitle = {Dosimetry for {FLASH} Radiotherapy},
-	pages = {328},
-	journaltitle = {Frontiers in Physics},
-	shortjournal = {Front. Phys.},
-	author = {Ashraf, Muhammad Ramish and Rahman, Mahbubur and Zhang, Rongxiao and Williams, Benjamin B. and Gladstone, David J. and Pogue, Brian W. and Bruza, Petr},
-	urldate = {2023-05-23},
-	date = {2020-08-21},
-	file = {Texte intégral:C\:\\Users\\Gérémy\\Zotero\\storage\\FM5I9F6W\\Ashraf et al. - 2020 - Dosimetry for FLASH Radiotherapy A Review of Tool.pdf:application/pdf},
+@book{beddarScintillationDosimetry2016,
+  title = {Scintillation Dosimetry},
+  editor = {Beddar, Sam and Beaulieu, Luc},
+  date = {2016},
+  series = {Imaging in Medical Diagnosis and Therapy},
+  publisher = {{CRC Press, Taylor \& Francis Group}},
+  location = {{Boca Raton London New York}},
+  isbn = {978-1-4822-0899-3},
+  langid = {english},
+  pagetotal = {416},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\34L92EN5\\1 Scintillation Dosimetry.pdf}
 }
 
-@article{pogue_review_2021,
-	title = {Review of in vivo optical molecular imaging and sensing from x-ray excitation},
-	volume = {26},
-	issn = {1083-3668},
-	url = {https://www.spiedigitallibrary.org/journals/journal-of-biomedical-optics/volume-26/issue-01/010902/Review-of-in-vivo-optical-molecular-imaging-and-sensing-from/10.1117/1.JBO.26.1.010902.full},
-	doi = {10.1117/1.JBO.26.1.010902},
-	number = {1},
-	journaltitle = {Journal of Biomedical Optics},
-	shortjournal = {J. Biomed. Opt.},
-	author = {Pogue, Brian W. and Zhang, Rongxiao and Cao, Xu and Jia, Jeremy Mengyu and Petusseau, Arthur and Bruza, Petr and Vinogradov, Sergei A.},
-	urldate = {2023-05-23},
-	date = {2021-01-01},
-	file = {Texte intégral:C\:\\Users\\Gérémy\\Zotero\\storage\\5SNRUAJY\\Pogue et al. - 2021 - Review of in vivo optical molecular imaging and se.pdf:application/pdf},
+@article{bruzaOnlineCombinationEPID2017,
+  title = {Online {{Combination}} of {{EPID}} \& {{Cherenkov Imaging}} for 3-{{D Dosimetry}} in a {{Liquid Phantom}}},
+  author = {Bruza, Petr and Andreozzi, Jacqueline M. and Gladstone, David J. and Jarvis, Lesley A. and Rottmann, Joerg and Pogue, Brian W.},
+  date = {2017-10},
+  journaltitle = {IEEE Transactions on Medical Imaging},
+  shortjournal = {IEEE Trans. Med. Imaging},
+  volume = {36},
+  number = {10},
+  pages = {2099--2103},
+  issn = {0278-0062, 1558-254X},
+  doi = {10.1109/TMI.2017.2717800},
+  url = {https://ieeexplore.ieee.org/document/7953673/},
+  urldate = {2023-05-23},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\CRWVVHNL\\Bruza et al. - 2017 - Online Combination of EPID & Cherenkov Imaging for.pdf}
 }
 
-@article{beaulieu_review_2016,
-	title = {Review of plastic and liquid scintillation dosimetry for photon, electron, and proton therapy},
-	volume = {61},
-	issn = {0031-9155, 1361-6560},
-	url = {https://iopscience.iop.org/article/10.1088/0031-9155/61/20/R305},
-	doi = {10.1088/0031-9155/61/20/R305},
-	pages = {R305--R343},
-	number = {20},
-	journaltitle = {Physics in Medicine and Biology},
-	shortjournal = {Phys. Med. Biol.},
-	author = {Beaulieu, Luc and Beddar, Sam},
-	urldate = {2023-05-23},
-	date = {2016-10-21},
-	file = {Beaulieu et Beddar - 2016 - Review of plastic and liquid scintillation dosimet.pdf:C\:\\Users\\Gérémy\\Zotero\\storage\\4EIABQ97\\Beaulieu et Beddar - 2016 - Review of plastic and liquid scintillation dosimet.pdf:application/pdf},
+@article{cerenkovVisibleRadiationProduced1937,
+  title = {Visible {{Radiation Produced}} by {{Electrons Moving}} in a {{Medium}} with {{Velocities Exceeding}} That of {{Light}}},
+  author = {Čerenkov, P. A.},
+  date = {1937-08-15},
+  journaltitle = {Physical Review},
+  shortjournal = {Phys. Rev.},
+  volume = {52},
+  number = {4},
+  pages = {378--379},
+  issn = {0031-899X},
+  doi = {10.1103/PhysRev.52.378},
+  url = {https://link.aps.org/doi/10.1103/PhysRev.52.378},
+  urldate = {2023-06-15},
+  langid = {english}
 }
 
-@article{cloutier_accurate_2022,
-	title = {Accurate dose measurements using Cherenkov emission polarization imaging},
-	volume = {49},
-	issn = {0094-2405, 2473-4209},
-	url = {https://onlinelibrary.wiley.com/doi/10.1002/mp.15693},
-	doi = {10.1002/mp.15693},
-	pages = {5417--5422},
-	number = {8},
-	journaltitle = {Medical Physics},
-	shortjournal = {Medical Physics},
-	author = {Cloutier, Émily and Archambault, Louis and Beaulieu, Luc},
-	urldate = {2023-05-23},
-	date = {2022-08},
-	langid = {english},
-	file = {Version soumise:C\:\\Users\\Gérémy\\Zotero\\storage\\GKF8L2CW\\Cloutier et al. - 2022 - Accurate dose measurements using Cherenkov emissio.pdf:application/pdf},
+@article{cloutierAccurateDoseMeasurements2022,
+  title = {Accurate Dose Measurements Using {{Cherenkov}} Emission Polarization Imaging},
+  author = {Cloutier, Émily and Archambault, Louis and Beaulieu, Luc},
+  date = {2022-08},
+  journaltitle = {Medical Physics},
+  shortjournal = {Medical Physics},
+  volume = {49},
+  number = {8},
+  pages = {5417--5422},
+  issn = {0094-2405, 2473-4209},
+  doi = {10.1002/mp.15693},
+  url = {https://onlinelibrary.wiley.com/doi/10.1002/mp.15693},
+  urldate = {2023-05-23},
+  langid = {english},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\GKF8L2CW\\Cloutier et al. - 2022 - Accurate dose measurements using Cherenkov emissio.pdf}
 }
 
-@article{jarvis_cherenkov_2014,
-	title = {Cherenkov Video Imaging Allows for the First Visualization of Radiation Therapy in Real Time},
-	volume = {89},
-	issn = {03603016},
-	url = {https://linkinghub.elsevier.com/retrieve/pii/S0360301614001394},
-	doi = {10.1016/j.ijrobp.2014.01.046},
-	pages = {615--622},
-	number = {3},
-	journaltitle = {International Journal of Radiation Oncology*Biology*Physics},
-	shortjournal = {International Journal of Radiation Oncology*Biology*Physics},
-	author = {Jarvis, Lesley A. and Zhang, Rongxiao and Gladstone, David J. and Jiang, Shudong and Hitchcock, Whitney and Friedman, Oscar D. and Glaser, Adam K. and Jermyn, Michael and Pogue, Brian W.},
-	urldate = {2023-05-23},
-	date = {2014-07},
-	langid = {english},
-	file = {Jarvis et al. - 2014 - Cherenkov Video Imaging Allows for the First Visua.pdf:C\:\\Users\\Gérémy\\Zotero\\storage\\V9JS76F7\\Jarvis et al. - 2014 - Cherenkov Video Imaging Allows for the First Visua.pdf:application/pdf},
+@article{cloutierDirectInwaterRadiation2022,
+  title = {Direct In-Water Radiation Dose Measurements Using {{Cherenkov}} Emission Corrected Signals from Polarization Imaging for a Clinical Radiotherapy Application},
+  author = {Cloutier, Émily and Beaulieu, Luc and Archambault, Louis},
+  date = {2022-06-10},
+  journaltitle = {Scientific Reports},
+  shortjournal = {Sci Rep},
+  volume = {12},
+  number = {1},
+  pages = {9608},
+  issn = {2045-2322},
+  doi = {10.1038/s41598-022-12672-w},
+  url = {https://www.nature.com/articles/s41598-022-12672-w},
+  urldate = {2023-05-23},
+  abstract = {Abstract                            Cherenkov emission (CE) is a visible blueish light emitted in water mediums irradiated by most radiotherapy treatment beams. However, CE is produced anisotropically which currently imposes a geometrical constraint uncertainty for dose measurements. In this work, polarization imaging is proposed and described as a method enabling precise 2D dose measurements using CE. CE produced in a water tank is imaged from four polarization angles using a camera coupled to a rotating polarizer. Using Malus’ law, the polarized component of CE is isolated and corrected with Monte Carlo calculated CE polar and azimuthal angular distributions. Projected dose measurements resulting from polarization-corrected CE are compared to equivalent radiochromic film measurements. Overall, agreement between polarized corrected CE signal and films measurements is found to be within 3\%, for projected percent depth dose (PPDD) and profiles at the different tested energies (                                                   \$\$\textbackslash gamma\$\$                                        γ                                                                  : 6 and                                                   \$\$18\textbackslash,\textbackslash hbox \{MV\}\$\$                                                               18                                              MV                                                                                       , e                                                   \$\$\^\{-\}\$\$                                                                                      -                                                                                       : 6 and 18                                                   \$\$\textbackslash,\textbackslash hbox \{MeV\}\$\$                                                                                      MeV                                                                                       ). In comparison, raw Cherenkov emission presented deviations up 60\% for electron beam PPDDs and 20\% for photon beams PPDDs. Finally, a degree of linear polarization between 29\% and 47\% was measured for CE in comparison to                                                   \$\$0.2\textbackslash pm 0.3\$\$                                                               0.2                       ±                       0.3                                                                                       \% for scintillation. Hence, polarization imaging is found to be a promising and powerful method for improved radio-luminescent dose measurements with possible extensions to signal separation.},
+  langid = {english},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\Y5527V6S\\Cloutier et al. - 2022 - Direct in-water radiation dose measurements using .pdf}
 }
 
-@article{cloutier_direct_2022,
-	title = {Direct in-water radiation dose measurements using Cherenkov emission corrected signals from polarization imaging for a clinical radiotherapy application},
-	volume = {12},
-	issn = {2045-2322},
-	url = {https://www.nature.com/articles/s41598-022-12672-w},
-	doi = {10.1038/s41598-022-12672-w},
-	abstract = {Abstract
-            
-              Cherenkov emission ({CE}) is a visible blueish light emitted in water mediums irradiated by most radiotherapy treatment beams. However, {CE} is produced anisotropically which currently imposes a geometrical constraint uncertainty for dose measurements. In this work, polarization imaging is proposed and described as a method enabling precise 2D dose measurements using {CE}. {CE} produced in a water tank is imaged from four polarization angles using a camera coupled to a rotating polarizer. Using Malus’ law, the polarized component of {CE} is isolated and corrected with Monte Carlo calculated {CE} polar and azimuthal angular distributions. Projected dose measurements resulting from polarization-corrected {CE} are compared to equivalent radiochromic film measurements. Overall, agreement between polarized corrected {CE} signal and films measurements is found to be within 3\%, for projected percent depth dose ({PPDD}) and profiles at the different tested energies (
-              
-                
-                  \$\${\textbackslash}gamma\$\$
-                  
-                    γ
-                  
-                
-              
-              : 6 and
-              
-                
-                  \$\$18{\textbackslash},{\textbackslash}hbox \{{MV}\}\$\$
-                  
-                    
-                      18
-                      
-                      {MV}
-                    
-                  
-                
-              
-              , e
-              
-                
-                  \$\${\textasciicircum}\{-\}\$\$
-                  
-                    
-                      
-                      -
-                    
-                  
-                
-              
-              : 6 and 18
-              
-                
-                  \$\${\textbackslash},{\textbackslash}hbox \{{MeV}\}\$\$
-                  
-                    
-                      
-                      {MeV}
-                    
-                  
-                
-              
-              ). In comparison, raw Cherenkov emission presented deviations up 60\% for electron beam {PPDDs} and 20\% for photon beams {PPDDs}. Finally, a degree of linear polarization between 29\% and 47\% was measured for {CE} in comparison to
-              
-                
-                  \$\$0.2{\textbackslash}pm 0.3\$\$
-                  
-                    
-                      0.2
-                      ±
-                      0.3
-                    
-                  
-                
-              
-              \% for scintillation. Hence, polarization imaging is found to be a promising and powerful method for improved radio-luminescent dose measurements with possible extensions to signal separation.},
-	pages = {9608},
-	number = {1},
-	journaltitle = {Scientific Reports},
-	shortjournal = {Sci Rep},
-	author = {Cloutier, Émily and Beaulieu, Luc and Archambault, Louis},
-	urldate = {2023-05-23},
-	date = {2022-06-10},
-	langid = {english},
-	file = {Texte intégral:C\:\\Users\\Gérémy\\Zotero\\storage\\Y5527V6S\\Cloutier et al. - 2022 - Direct in-water radiation dose measurements using .pdf:application/pdf},
+@thesis{cloutierUtilisationRadioluminescencePour2022,
+  title = {Utilisation de la radioluminescence pour la conception de dosimètres optiques déformables},
+  author = {Cloutier, Emily},
+  date = {2022},
+  institution = {{Université Laval}},
+  location = {{Québec}},
+  url = {http://hdl.handle.net/20.500.11794/73768},
+  abstract = {Les traitements modernes de radiothérapie administrent la dose nécessaire à l'éradication de la région tumorale par un enchaînement complexe de faisceaux personnalisés selon l'anatomie de chaque patient. La distribution de dose résultante présente donc de forts gradients qui visent à maximiser l'irradiation de la maladie tout en limitant l'exposition des tissus sains. Or, les déformations et mouvements anatomiques que présentent certains patients viennent modifier la géométrie attendue et peuvent réduire la qualité escomptée du traitement. Dans ce contexte, le besoin d'outils permettant la quantification de la dose en présence de déformations est grandissant. Utilisant à profit les qualités uniques démontrées des dosimètres optiques, la thèse présentée vise le développement d'une nouvelle génération de dosimètres pensée pour la dosimétrie déformable. Entre autres, il sera montré que le dosimètre développé permet une mesure simultanée de la dose et de la déformation, ce qui ouvre la voie à la validation expérimentale d'algorithmes de recalage d'images déformables. Les contributions de la thèse se déploient principalement selon trois volets : la caractérisation des défis liés à l'utilisation de différentes sources de signaux radioluminescents, en particulier la radiation Cherenkov et la scintillation ; le développement de techniques de détection adaptées, telles que l'imagerie polarisée, l'imagerie spectrale et la triangulation stéréoscopique ; puis le développement d'un dosimètre déformable utilisant ces signaux pour la mesure simultanée de la dose et de la déformation. D'abord, la directionalité de l'émission Cherenkov a été caractérisée de pair avec l'imagerie polarisée. Le rayonnement Cherenkov est une émission lumineuse directement produite dans l'eau, le milieu de référence, suite à son irradiation. Or, les photons optiques sont émis selon un cône dont l'angle et l'orientation sont déterminés par l'énergie du faisceau et sa direction, lesquels varient grandement dans un fantôme. Ainsi, l'imagerie polarisée a été étudiée comme solution à l'utilisation du signal Cherenkov pour des mesures précises de la dose. En utilisant l'imagerie polarisée, la contribution polarisée du signal a été associée à la directionnalité du rayonnement qui a alors pu être corrigée. Ainsi, des écarts lors de mesures de dose atteignant jusqu'à 60\% avec les valeurs attendues ont été réduits à moins de 3\% en moyenne. Il a d'ailleurs été montré que l'état de polarisation du signal Cherenkov peut être utilisé pour le discriminer d'un signal de scintillation. Ainsi, les deux premières études présentées au sein de cette thèse montrent que des mesures précises ({$<$} 3\%) de la dose, directement dans l'eau (le milieu de référence), peuvent être réalisées en utilisant le signal Cherenkov combiné à l'imagerie polarisée. Concernant l'utilisation de caméras pour la mesure de signaux radioluminescents, il a été montré qu'il est possible d'allier la grande résolution spatiale de ces photodétecteurs à une résolution spectrale. Les caméras polychromatiques utilisant un patron de Bayer, par exemple, collectent la lumière avec plusieurs milliers de pixels sur lesquels des filtres colorés sont apposés de sorte à former une mosaïque. Ainsi, ces caméras mesurent la lumière selon un canal rouge, vert et bleu. En utilisant les techniques de dématriçage appropriées, il est possible d'interpoler l'information spectrale manquante à chaque pixel. Ainsi, le formalisme hyperspectral, initialement développé pour des mesures en un point, peut être appliqué à des mesures de plus grande résolution spatiale. Ainsi, il a été montré que l'utilisation d'un kernel bilinéaire pour le dématriçage d'une caméra polychromatique utilisant un filtre de Bayer permet d'isoler les signaux Cherenkov et de scintillation avec une précision de 1\%. Enfin, un dosimètre déformable permettant la mesure simultanée de la dose et de la déformation a été développé. Le système comprend un fantôme cylindrique transparent au sein duquel un réseau de 19 scintillateurs a été intégré. Le système comprend également un ensemble de 2 paires de caméras stéréoscopiques qui permet le suivi en 3D de la position des extrémités de chacun des scintillateurs. En conséquence, le système permet le suivi de la déformation avec une exactitude et une précision de respectivement 0.08 mm et 0.3 mm. Le suivi 3D de la position permet aussi la correction des variations de signal qui ne sont pas proportionnelles à la dose, mais plutôt au couplage des fibres avec la caméra. Le dosimètre a également permis la mesure de la dose en accord à 1\% près avec celle prédite par un logiciel de planification de traitement et un système dosimétrique complémentaire. Ainsi, la thèse a permis le développement d'un premier dosimètre mesurant simultanément la dose et la déformation, permettant une comparaison avec un algorithme de recalage d'image déformable. Ce faisant, l'exploration d'une nouvelle voie d'application de la scintillation a, de plus, mené à l'avancement des connaissances en dosimétrie optique. Modern radiotherapy treatments deliver the dose to the target through a complex sequence of beams customized to the anatomy of each patient. The resulting dose distribution therefore has strong gradients that aim to maximize disease irradiation while limiting exposure of healthy tissue. However, the anatomical deformations and movements that some patients present modify the expected geometry and may potentially reduce the quality of the treatment. In this context, there is a growing need for tools able of measuring dose in the presence of deformations. Taking advantage of the unique qualities of optical dosimeters, the presented thesis aims at developing a new generation of dosimeters designed for deformable dosimetry. Enabling simultaneous measurements of dose and deformation, this dosimeter could also be used for the validation of deformable image registration algorithms. The contributions of the thesis are threefold: the characterization of the challenges related to the use of different sources of radioluminescent signals, in particular Cherenkov radiation and scintillation; the development of appropriate detection techniques, such as polarized imaging, spectral imaging and stereo triangulation; and then the development of a deformable dosimeter using these signals for the simultaneous measurement of dose and deformation. First, the directionality of Cherenkov emission was characterized using polarized imaging. Cherenkov radiation is a light emission directly produced in water, the reference medium for beam monitoring. Cherenkov photons are emitted in a cone whose angle and orientation are determined by the beam energy and direction, which vary greatly in a phantom. Thus, polarized imaging has been investigated as a solution enabling the use of Cherenkov emission for accurate dose measurements. By using polarization imaging, the polarized contribution of the signal was associated with the directionality of the radiation, which could then be corrected. Thus, deviations in dose measurements previously up to 60\% from the expected values were reduced under 3\% on average. It has also been shown that the polarization state of the Cherenkov signal can be used to discriminate it from a scintillation signal. Thus, the first two studies presented in this thesis show that accurate measurements, without disturbing the reference medium, can be made using the Cherenkov signal combined with polarization imaging. Concerning the use of cameras for the measurement of radioluminescent signals, it has been shown that it is possible to combine the high spatial resolution of these photodetectors with a spectral resolution. Polychromatic cameras using a Bayer pattern, for example, collect light with several thousand pixels on which colored filters are affixed to form a mosaic. Thus, these cameras measure the light according to a red, green and blue channel. By using appropriate demosaicing techniques, it is possible to interpolate the missing spectral information at each pixel. Thus, the hyperspectral formalism, initially developed for single point measurements, can be applied to higher spatial resolution measurements. Among others, the use of a bilinear kernel for dematrixing a polychromatic camera using a Bayer filter allows to isolate Cherenkov and scintillation signals with an accuracy of 1\%. Finally, a deformable dosimeter allowing the simultaneous measurement of dose and deformation has been developed. The system includes a transparent cylindrical phantom in which an array of 19 scintillators has been integrated. The system also includes a set of 2 pairs of stereo cameras that allows the 3D tracking of the position of each scintillator ends. As a result, the system allows the 3D tracking of the deformation with an accuracy and accuracy of 0.08 mm and 0.3 mm respectively. This 3D position tracking also allows the correction of signal variations that are not proportional to the dose, but rather to the coupling of the fibers with the camera. The dosimeter also allowed measurement of the dose in agreement within 1\% of the dose predicted by a treatment planning software and a complementary dosimetric system. Thus, the thesis allowed the development of a first dosimeter measuring simultaneously the dose and the deformation, allowing a comparison with a deformable image registration algorithm. In doing so, the exploration of a new application of scintillation has also led to the advancement of knowledge in optical dosimetry},
+  langid = {french},
+  pagetotal = {194},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\Y9EPGVEZ\\Cloutier - 2022 - Utilisation de la radioluminescence pour la concep.pdf}
 }
 
-@article{jarvis_initial_2021,
-	title = {Initial Clinical Experience of Cherenkov Imaging in External Beam Radiation Therapy Identifies Opportunities to Improve Treatment Delivery},
-	volume = {109},
-	issn = {03603016},
-	url = {https://linkinghub.elsevier.com/retrieve/pii/S0360301620345016},
-	doi = {10.1016/j.ijrobp.2020.11.013},
-	pages = {1627--1637},
-	number = {5},
-	journaltitle = {International Journal of Radiation Oncology*Biology*Physics},
-	shortjournal = {International Journal of Radiation Oncology*Biology*Physics},
-	author = {Jarvis, Lesley A. and Hachadorian, Rachael L. and Jermyn, Michael and Bruza, Petr and Alexander, Daniel A. and Tendler, Irwin I. and Williams, Benjamin B. and Gladstone, David J. and Schaner, Philip E. and Zaki, Bassem I. and Pogue, Brian W.},
-	urldate = {2023-05-23},
-	date = {2021-04},
-	langid = {english},
-	file = {Jarvis et al. - 2021 - Initial Clinical Experience of Cherenkov Imaging i.pdf:C\:\\Users\\Gérémy\\Zotero\\storage\\WJBH78V2\\Jarvis et al. - 2021 - Initial Clinical Experience of Cherenkov Imaging i.pdf:application/pdf},
+@article{estruchCommentFonctionnentCapteurs2015,
+  title = {Comment Fonctionnent Les Capteurs {{CCD}} et {{CMOS}} ?},
+  author = {Estruch, Thomas},
+  date = {2015-11},
+  journaltitle = {Photoniques},
+  shortjournal = {Photoniques},
+  number = {79},
+  pages = {39--42},
+  issn = {1629-4475, 2269-8418},
+  doi = {10.1051/photon/20157939},
+  url = {http://www.photoniques.com/10.1051/photon/20157939},
+  urldate = {2023-06-02},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\EESSXT4E\\Estruch - 2015 - Comment fonctionnent les capteurs CCD et CMOS .pdf}
 }
 
-@article{jean_investigation_2019,
-	title = {Investigation of the quinine sulfate dihydrate spectral properties and its effects on Cherenkov dosimetry},
-	volume = {64},
-	issn = {1361-6560},
-	url = {https://iopscience.iop.org/article/10.1088/1361-6560/ab2827},
-	doi = {10.1088/1361-6560/ab2827},
-	pages = {155019},
-	number = {15},
-	journaltitle = {Physics in Medicine \& Biology},
-	shortjournal = {Phys. Med. Biol.},
-	author = {Jean, Emilie and Delage, Marie-Ève and Beaulieu, Luc},
-	urldate = {2023-05-23},
-	date = {2019-08-07},
-	file = {Version soumise:C\:\\Users\\Gérémy\\Zotero\\storage\\2FSUAH6I\\Jean et al. - 2019 - Investigation of the quinine sulfate dihydrate spe.pdf:application/pdf},
+@article{glaserOpticalDosimetryRadiotherapy2014,
+  title = {Optical Dosimetry of Radiotherapy Beams Using {{Cherenkov}} Radiation: The Relationship between Light Emission and Dose},
+  shorttitle = {Optical Dosimetry of Radiotherapy Beams Using {{Cherenkov}} Radiation},
+  author = {Glaser, Adam K and Zhang, Rongxiao and Gladstone, David J and Pogue, Brian W},
+  date = {2014-07-21},
+  journaltitle = {Physics in Medicine and Biology},
+  shortjournal = {Phys. Med. Biol.},
+  volume = {59},
+  number = {14},
+  pages = {3789--3811},
+  issn = {0031-9155, 1361-6560},
+  doi = {10.1088/0031-9155/59/14/3789},
+  url = {https://iopscience.iop.org/article/10.1088/0031-9155/59/14/3789},
+  urldate = {2023-05-23},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\BZIEP6MZ\\Glaser et al. - 2014 - Optical dosimetry of radiotherapy beams using Cher.pdf}
 }
 
-@article{bruza_online_2017,
-	title = {Online Combination of {EPID} \& Cherenkov Imaging for 3-D Dosimetry in a Liquid Phantom},
-	volume = {36},
-	issn = {0278-0062, 1558-254X},
-	url = {https://ieeexplore.ieee.org/document/7953673/},
-	doi = {10.1109/TMI.2017.2717800},
-	pages = {2099--2103},
-	number = {10},
-	journaltitle = {{IEEE} Transactions on Medical Imaging},
-	shortjournal = {{IEEE} Trans. Med. Imaging},
-	author = {Bruza, Petr and Andreozzi, Jacqueline M. and Gladstone, David J. and Jarvis, Lesley A. and Rottmann, Joerg and Pogue, Brian W.},
-	urldate = {2023-05-23},
-	date = {2017-10},
-	file = {Version acceptée:C\:\\Users\\Gérémy\\Zotero\\storage\\CRWVVHNL\\Bruza et al. - 2017 - Online Combination of EPID & Cherenkov Imaging for.pdf:application/pdf},
+@article{glaserProjectionImagingPhoton2013,
+  title = {Projection Imaging of Photon Beams Using {{Čerenkov-excited}} Fluorescence},
+  author = {Glaser, Adam K and Davis, Scott C and Voigt, William H A and Zhang, Rongxiao and Pogue, Brian W and Gladstone, David J},
+  date = {2013-02-07},
+  journaltitle = {Physics in Medicine and Biology},
+  shortjournal = {Phys. Med. Biol.},
+  volume = {58},
+  number = {3},
+  pages = {601--619},
+  issn = {0031-9155, 1361-6560},
+  doi = {10.1088/0031-9155/58/3/601},
+  url = {https://iopscience.iop.org/article/10.1088/0031-9155/58/3/601},
+  urldate = {2023-05-23},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\FP5AXY42\\Glaser et al. - 2013 - Projection imaging of photon beams using Čerenkov-.pdf}
 }
 
-@article{glaser_optical_2014,
-	title = {Optical dosimetry of radiotherapy beams using Cherenkov radiation: the relationship between light emission and dose},
-	volume = {59},
-	issn = {0031-9155, 1361-6560},
-	url = {https://iopscience.iop.org/article/10.1088/0031-9155/59/14/3789},
-	doi = {10.1088/0031-9155/59/14/3789},
-	shorttitle = {Optical dosimetry of radiotherapy beams using Cherenkov radiation},
-	pages = {3789--3811},
-	number = {14},
-	journaltitle = {Physics in Medicine and Biology},
-	shortjournal = {Phys. Med. Biol.},
-	author = {Glaser, Adam K and Zhang, Rongxiao and Gladstone, David J and Pogue, Brian W},
-	urldate = {2023-05-23},
-	date = {2014-07-21},
-	file = {Glaser et al. - 2014 - Optical dosimetry of radiotherapy beams using Cher.pdf:C\:\\Users\\Gérémy\\Zotero\\storage\\BZIEP6MZ\\Glaser et al. - 2014 - Optical dosimetry of radiotherapy beams using Cher.pdf:application/pdf},
+@book{jacksonClassicalElectrodynamics2009a,
+  title = {Classical Electrodynamics},
+  author = {Jackson, John David},
+  date = {2009},
+  edition = {3. ed., [Nachdr.]},
+  publisher = {{Wiley}},
+  location = {{Hoboken, NY}},
+  isbn = {978-0-471-30932-1},
+  langid = {english},
+  pagetotal = {808}
 }
 
-@article{glaser_projection_2013,
-	title = {Projection imaging of photon beams using Čerenkov-excited fluorescence},
-	volume = {58},
-	issn = {0031-9155, 1361-6560},
-	url = {https://iopscience.iop.org/article/10.1088/0031-9155/58/3/601},
-	doi = {10.1088/0031-9155/58/3/601},
-	pages = {601--619},
-	number = {3},
-	journaltitle = {Physics in Medicine and Biology},
-	shortjournal = {Phys. Med. Biol.},
-	author = {Glaser, Adam K and Davis, Scott C and Voigt, William H A and Zhang, Rongxiao and Pogue, Brian W and Gladstone, David J},
-	urldate = {2023-05-23},
-	date = {2013-02-07},
-	file = {Version acceptée:C\:\\Users\\Gérémy\\Zotero\\storage\\FP5AXY42\\Glaser et al. - 2013 - Projection imaging of photon beams using Čerenkov-.pdf:application/pdf},
+@article{jarvisCherenkovVideoImaging2014,
+  title = {Cherenkov {{Video Imaging Allows}} for the {{First Visualization}} of {{Radiation Therapy}} in {{Real Time}}},
+  author = {Jarvis, Lesley A. and Zhang, Rongxiao and Gladstone, David J. and Jiang, Shudong and Hitchcock, Whitney and Friedman, Oscar D. and Glaser, Adam K. and Jermyn, Michael and Pogue, Brian W.},
+  date = {2014-07},
+  journaltitle = {International Journal of Radiation Oncology*Biology*Physics},
+  shortjournal = {International Journal of Radiation Oncology*Biology*Physics},
+  volume = {89},
+  number = {3},
+  pages = {615--622},
+  issn = {03603016},
+  doi = {10.1016/j.ijrobp.2014.01.046},
+  url = {https://linkinghub.elsevier.com/retrieve/pii/S0360301614001394},
+  urldate = {2023-05-23},
+  langid = {english},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\V9JS76F7\\Jarvis et al. - 2014 - Cherenkov Video Imaging Allows for the First Visua.pdf}
 }
 
-@article{estruch_comment_2015,
-	title = {Comment fonctionnent les capteurs {CCD} et {CMOS} ?},
-	issn = {1629-4475, 2269-8418},
-	url = {http://www.photoniques.com/10.1051/photon/20157939},
-	doi = {10.1051/photon/20157939},
-	pages = {39--42},
-	number = {79},
-	journaltitle = {Photoniques},
-	shortjournal = {Photoniques},
-	author = {Estruch, Thomas},
-	urldate = {2023-06-02},
-	date = {2015-11},
-	file = {Texte intégral:C\:\\Users\\Gérémy\\Zotero\\storage\\EESSXT4E\\Estruch - 2015 - Comment fonctionnent les capteurs CCD et CMOS .pdf:application/pdf},
+@article{jarvisInitialClinicalExperience2021,
+  title = {Initial {{Clinical Experience}} of {{Cherenkov Imaging}} in {{External Beam Radiation Therapy Identifies Opportunities}} to {{Improve Treatment Delivery}}},
+  author = {Jarvis, Lesley A. and Hachadorian, Rachael L. and Jermyn, Michael and Bruza, Petr and Alexander, Daniel A. and Tendler, Irwin I. and Williams, Benjamin B. and Gladstone, David J. and Schaner, Philip E. and Zaki, Bassem I. and Pogue, Brian W.},
+  date = {2021-04},
+  journaltitle = {International Journal of Radiation Oncology*Biology*Physics},
+  shortjournal = {International Journal of Radiation Oncology*Biology*Physics},
+  volume = {109},
+  number = {5},
+  pages = {1627--1637},
+  issn = {03603016},
+  doi = {10.1016/j.ijrobp.2020.11.013},
+  url = {https://linkinghub.elsevier.com/retrieve/pii/S0360301620345016},
+  urldate = {2023-05-23},
+  langid = {english},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\WJBH78V2\\Jarvis et al. - 2021 - Initial Clinical Experience of Cherenkov Imaging i.pdf}
+}
+
+@thesis{jeanDeveloppementDosimetreHybride2022,
+  title = {Développement d'un dosimètre hybride alliant la scintillation et la radiation Čerenkov},
+  author = {Jean, Emilie},
+  date = {2022},
+  institution = {{Université Laval}},
+  location = {{Québec}},
+  abstract = {Cette thèse porte sur le développement d'un détecteur hybride alliant la scintillation à la radiation Čerenkov pour une utilisation en radiothérapie. Bien que les dosimètres à scintillation aient déjà fait leurs preuves pour une mesure de dose précise dans des conditions d'irradiation complexes et variées, la radiation Čerenkov a pour l'instant peu d'applications en raison de ses multiples dépendances. Cette émission lumineuse résulte du passage de particules chargées ayant une vitesse supérieure à la lumière dans un milieu diélectrique et peut être observée lors de l'irradiation des dosimètres à scintillation plastiques. Alors que l'approche conventionnelle en dosimétrie à scintillation consiste à traiter ce signal comme un bruit en raison de sa dépendance angulaire, plusieurs recherches visaient à utiliser sa dépendance à l'énergie des électrons pour effectuer une mesure de dose. L'approche préconisée dans cette thèse est différente puisque le but est de mettre à profit cette émission intrinsèque en utilisant sa dépendance angulaire pour effectuer une mesure de l'angle incident des particules ionisantes utilisées en radiothérapie. Le projet couvre donc l'ensemble des théories nécessaires à la compréhension des multiples phénomènes physiques en jeu ainsi que les étapes de la conception, la caractérisation, la mise en application et la validation du détecteur. En ce qui concerne la conception, les hypothèses de départ se basent sur l'analyse des mécanismes derrière la production et la transmission des photons optiques Čerenkov dans une fibre optique. Par la suite, une étude des différents composants disponibles et configurations possibles afin de produire un premier prototype fonctionnel est présentée. Le choix du photodétecteur nécessaire à la mesure de l'intensité des différents signaux lumineux est également accompagné d'une étude comparative afin de sélectionner celui dont les caractéristiques sont optimales pour la réalisation du projet. Ensuite, les différents travaux expérimentaux démontrent la mise en application du prototype composé d'un dosimètre à scintillation et d'un détecteur Čerenkov. Ils valident ainsi le principe de fonctionnement du détecteur hybride par la réalisation de mesures simultanées de la dose et de l'angle d'irradiation, mais couvrent également la caractérisation angulaire et dosimétrique du prototype. Enfin, des travaux de simulations Monte Carlo valident les différentes observations faites en plus d'aider à la compréhension des liens existants entre les multiples dépendances de la radiation Čerenkov et la précision du détecteur. Une dernière section est finalement consacrée à l'optimisation du détecteur en vue d'améliorer sa conception. Celle-ci présente des pistes de solutions aux diverses limitations du prototype développé. La thèse fournit ainsi les bases nécessaires afin de guider le détecteur vers une application clinique.},
+  langid = {french},
+  pagetotal = {154},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\YWN4DH7M\\Jean - 2022 - Développement d'un dosimètre hybride alliant la sc.pdf}
+}
+
+@article{jeanInvestigationQuinineSulfate2019,
+  title = {Investigation of the Quinine Sulfate Dihydrate Spectral Properties and Its Effects on {{Cherenkov}} Dosimetry},
+  author = {Jean, Emilie and Delage, Marie-Ève and Beaulieu, Luc},
+  date = {2019-08-07},
+  journaltitle = {Physics in Medicine \& Biology},
+  shortjournal = {Phys. Med. Biol.},
+  volume = {64},
+  number = {15},
+  pages = {155019},
+  issn = {1361-6560},
+  doi = {10.1088/1361-6560/ab2827},
+  url = {https://iopscience.iop.org/article/10.1088/1361-6560/ab2827},
+  urldate = {2023-05-23},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\2FSUAH6I\\Jean et al. - 2019 - Investigation of the quinine sulfate dihydrate spe.pdf}
+}
+
+@article{pogueReviewVivoOptical2021,
+  title = {Review of in Vivo Optical Molecular Imaging and Sensing from X-Ray Excitation},
+  author = {Pogue, Brian W. and Zhang, Rongxiao and Cao, Xu and Jia, Jeremy Mengyu and Petusseau, Arthur and Bruza, Petr and Vinogradov, Sergei A.},
+  date = {2021-01-01},
+  journaltitle = {Journal of Biomedical Optics},
+  shortjournal = {J. Biomed. Opt.},
+  volume = {26},
+  number = {01},
+  issn = {1083-3668},
+  doi = {10.1117/1.JBO.26.1.010902},
+  url = {https://www.spiedigitallibrary.org/journals/journal-of-biomedical-optics/volume-26/issue-01/010902/Review-of-in-vivo-optical-molecular-imaging-and-sensing-from/10.1117/1.JBO.26.1.010902.full},
+  urldate = {2023-05-23},
+  file = {C\:\\Users\\Gérémy\\Zotero\\storage\\5SNRUAJY\\Pogue et al. - 2021 - Review of in vivo optical molecular imaging and se.pdf}
 }

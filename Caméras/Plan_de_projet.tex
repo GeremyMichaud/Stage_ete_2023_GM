@@ -9,20 +9,22 @@
 \usepackage{pifont}
 \usepackage{multicol}
 \usepackage{setspace}
-\addbibresource{Cherenkov.bib}
+\usepackage{biblatex}
+\bibliography{Cherenkov.bib}
+%\addbibresource{Cherenkov.bib}
 
 \begin{document}
 \section*{Introduction}
 Le présent plan de mesure vise à fournir des directives sommaires pour reproduire les
-résultats obtenus dans les articles publiés par \citeauthor{cloutier_accurate_2022} \cite{cloutier_accurate_2022,cloutier_direct_2022}
+résultats obtenus dans les articles publiés par \Citeauthor{cloutierAccurateDoseMeasurements2022} \cite{cloutierAccurateDoseMeasurements2022, cloutierDirectInwaterRadiation2022}
 dans le domaine de l'émission Cherenkov et de l'imagerie de polarisation.
 L'émission Cherenkov se produit lorsque des particules chargées se déplacent à une vitesse supérieure à celle de la lumière
-dnas milieu diélectrique. Ce phénomène engendre une émission de lumière polarisée qui peut
+dans un milieu diélectrique \cite{cerenkovVisibleRadiationProduced1937}. Ce phénomène engendre une émission de lumière polarisée qui peut
 être utilisée pour détecter et quantifier les distributions de dose dans des applications
 médicales telles que la radiothérapie. Les mesures de dose Cherenkov offrent donc une
 méthode prometteuse pour évaluer la distribution de dose lors de la radiothérapie externe.
 Cette approche exploite nottament la lumière Cherenkov émise par un milieu irradié,
-offrant ainsi la possibilité de visualiser et de quantifier la distribution de dose.
+offrant ainsi la possibilité de visualiser et de quantifier la distribution de dose en temps réel \cite{jarvisCherenkovVideoImaging2014}.
 
 Ce plan de mesure fournira des instructions étape par étape pour se familiariser avec l'équipement nécessaire, réaliser les mesures de dose Cherenkov et reproduire les résultats décrits dans l'article. Les principales étapes comprennent la préparation de l'équipement, le calibrage de la caméra, le positionnement précis de la cuve d'eau, l'acquisition des images, l'analyse des images, la correction des mesures Cherenkov, la comparaison avec les prévisions du système de planification de traitement (TPS) et l'analyse des écarts.
 
