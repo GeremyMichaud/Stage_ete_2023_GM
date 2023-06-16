@@ -1,3 +1,6 @@
+%% Plan_de_projet.tex
+%% Copyright 2023 G. Michaud
+
 \documentclass{Thesis}
 \usepackage{ProjectPackageA22}
 \title{Dosimétrie optique grâce à l'imagerie de polarisation de la radiation Cherenkov
@@ -42,6 +45,32 @@ Les objectifs de ce projet sont les suivants:
 \end{enumerate}
 
 \section*{Méthodes}
+Tout d'abord, nous utiliserons un réservoir d'eau positionné à une distance source-surface (SSD) de 100 cm.
+Ce réservoir sera irradié à la fois avec des faisceaux de photons et d'électrons de 6MeV, 18MeV, 6MV et 18MV à débit de dose de 600 MU/min.
+L'espace des phases sera de taille $5 \times \SI{5}{cm^2}$ pour les faisceaux de photons et de $6 \times \SI{6}{cm^2}$ pour les faisceaux d'électrons.
+
+Nous utiliserons une caméra CCD située à une distance de 50 cm du fantôme et munie d'une lentille pour capturer le signal d'émission Cherenkov résultant.
+Les images obtenues représenteront le signal Cherenkov projeté le long de l'axe optique en sommant le signal sur l'épaisseur du réservoir d'eau.
+Ces images nous permettront de mesurer les distributions de dose projetées.
+Pour chaque ensemble de mesures, nous extrairons les profils projetés à la profondeur de dose maximale ($d_{max}$) ainsi que les profondeurs de dose en pourcentage projetées (PPDD).
+
+Afin de comparer et valider nos résultats, nous reproduirons également les mesures de dose à l'aide de films de radiothérapie.
+Ces films seront insérés dans le fantôme d'eau solide imitant les conditions d'irradiation utilisées pour les mesures basées sur l'émission Cherenkov.
+Nous réaliserons des mesures de profils en insérant les films à la profondeur de dose maximale, ainsi que des mesures de profondeur en insérant les films entre deux couches de plaques d'eau solide.
+Les doses seront sommées le long de la largeur du faisceau, de manière similaire aux mesures d'imagerie Cherenkov.
+
+Pour mesurer la polarisation de l'émission Cherenkov, nous utiliserons une analyse de polarisation à l'aide d'un polariseur linéaire rotatif.
+Les images capturées à quatre angles de transmission ($0^\circ$, $45^\circ$, $90^\circ$, $135^\circ$) nous fourniront des informations précieuses sur l'intensité et l'orientation de la lumière polarisée.
+En utilisant la loi de Malus et en supposant que le signal sera partiellement polarisé, nous pourrons extraire la contribution polarisée du signal, l'angle moyen de polarisation et la partie non polarisée du signal.
+
+En parallèle, nous effectuerons des simulations Monte Carlo à l'aide du logiciel Geant4 pour extraire les distributions polaires et azimutales de l'émission Cherenkov.
+Ces simulations seront réalisées en utilisant des conditions similaires aux mesures expérimentales.
+% Peut-être plutôt avec un système de planification de traitement
+
+Les distributions polaires et azimutales obtenues à partir des simulations seront utilisées pour corriger les distributions de dose Cherenkov déformées en raison de l'anisotropie intrinsèque de l'émission Cherenkov.
+La correction sera appliquée en utilisant des facteurs de correction angulaires $C_{theta}(x, y)$ et $C_{phi}(x, y)$ pour chaque position dans le réservoir d'eau.
+
+En résumé, la méthode de mesure comprendra la reproduction des conditions expérimentales décrites dans les articles de référence, l'utilisation de films de radiothérapie pour valider les résultats, l'analyse de polarisation à l'aide d'un polariseur linéaire rotatif, et l'utilisation de simulations Monte Carlo pour corriger les distributions de dose Cherenkov en tenant compte de l'anisotropie intrinsèque.
 
 \section*{Équipement}
 \begin{multicols}{2}
@@ -50,9 +79,12 @@ Les objectifs de ce projet sont les suivants:
     \item Accélérateur linéaire Varian TrueBeam
     \item Cuve d'eau en acrylique de $15 \times 15 \times \SI{20}{cm^3}$
     \item Caméra CCD refroidie Atik 414EX
+    \item Lentille de 12 mm de distance focale
     \item Mince film noir opaque couvrant les parois internes de la cuve
     \item Couvertures opaques noires
-    \item 
+    \item Polariseur linéaire rotatif XP42-18 d'Edmund Optics
+    \item Films de radiothérapie Gafchromic EBT3
+    \item Sytème de planification de traitement en radio-oncologie Pinnacle 9.2
 \end{itemize}
 \end{multicols}
 
