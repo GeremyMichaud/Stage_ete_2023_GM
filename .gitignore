@@ -1,3 +1,5 @@
+*.vscode
+*.json
 *aux
 %*.aux
 %*.bbl
