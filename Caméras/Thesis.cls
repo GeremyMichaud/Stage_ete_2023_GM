@@ -49,9 +49,9 @@
 % ---------------
 
 \ifIcomma
-    \RequirePackage[comma]{ProjectPackageA22}
+    \RequirePackage[comma]{ProjectPackage}
 \else
-    \RequirePackage[dot]{ProjectPackageA22}
+    \RequirePackage[dot]{ProjectPackage}
     \ClassWarningNoLine{homework}{Package icomma not imported by default. To import use option "comma"}
 \fi
 
