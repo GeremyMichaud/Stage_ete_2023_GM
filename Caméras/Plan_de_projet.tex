@@ -47,12 +47,13 @@ Les objectifs de ce projet sont les suivants:
 \end{enumerate}
 
 \section*{Méthodes}
-Tout d'abord, nous utiliserons un réservoir d'eau positionné à une distance source-surface (SSD) de 100 cm.
-Ce réservoir sera irradié en alternance avec des faisceaux de photons et d'électrons de de différentes énergies: 6MeV, 18MeV, 6MV et 18MV.
+Tout d'abord, nous utiliserons un réservoir d'eau positionné à une distance source-peau (DSP) de 100 cm.
+Ce réservoir sera irradié en alternance avec des faisceaux de photons et d'électrons de de différentes énergies: 6MV, 18MV, 6MeV et 18MeV.
 Le débit de dose sera de 600 MU/min.
 Pour les faisceaux de photons, l'espace de phases sera de taille $5 \times \SI{5}{cm^2}$, tandis que pour les faisceaux d'électrons, il sera de taille $6 \times \SI{6}{cm^2}$.
 
-Nous utiliserons une caméra CCD équipée d'une lentille, située à une distance de 50 cm du réservoir, pour capturer le signal d'émission Čerenkov généré.
+Nous utiliserons une caméra équipée d'un capteur d'image à transfert de charge (CCD) et d'une lentille.
+La caméra sera positionnée à une distance de 50 cm du réservoir afin de capturer le signal d'émission Čerenkov généré.
 Les images obtenues représenteront le signal Čerenkov projeté le long de l'axe optique en sommant le signal sur l'épaisseur du réservoir d'eau.
 Ces images nous permettront de mesurer les distributions de dose projetées.
 Pour chaque ensemble de mesures, nous extrairons les profils projetés à la profondeur de dose maximale ($d_{max}$) ainsi que les profondeurs de dose en pourcentage projetées (PPDD).
@@ -66,9 +67,8 @@ Pour mesurer la polarisation de l'émission Čerenkov, nous utiliserons une anal
 Les images capturées à quatre angles de transmission ($0^\circ$, $45^\circ$, $90^\circ$, $135^\circ$) nous fourniront des informations précieuses sur l'intensité et l'orientation de la lumière polarisée.
 En utilisant la loi de Malus et en supposant que le signal sera partiellement polarisé, nous pourrons extraire la contribution polarisée du signal, l'angle moyen de polarisation et la partie non polarisée du signal.
 
-En parallèle, nous effectuerons des simulations Monte Carlo à l'aide du logiciel Geant4 pour extraire les distributions polaires et azimutales de l'émission Čerenkov.
-Ces simulations seront réalisées en utilisant des conditions similaires aux mesures expérimentales.
-% Peut-être plutôt avec un système de planification de traitement
+En parallèle, nous utiliserons les simulations Monte Carlo effectuées par \Citeauthor{cloutierAccurateDoseMeasurements2022} à l'aide du logiciel Geant4 pour extraire les distributions polaires et azimutales de l'émission Čerenkov.
+Ces simulations ont été réalisées en reproduisant les conditions expérimentales.
 
 Les distributions polaires et azimutales obtenues à partir des simulations seront utilisées pour corriger les distributions de dose Čerenkov déformées en raison de l'anisotropie intrinsèque de l'émission Čerenkov.
 La correction sera appliquée en utilisant des facteurs de correction angulaires $C_{\theta}(x, y)$ et $C_{\phi}(x, y)$ pour chaque position dans le réservoir d'eau.
@@ -87,7 +87,6 @@ En résumé, la méthode de mesure comprendra la reproduction des conditions exp
     \item Couvertures opaques noires
     \item Polariseur linéaire rotatif XP42-18 d'Edmund Optics
     \item Films de radiothérapie Gafchromic EBT3
-    \item Système de planification de traitement en radio-oncologie Pinnacle 9.2
 \end{itemize}
 \end{multicols}
 
