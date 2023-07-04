@@ -6,15 +6,30 @@ from camera_calibrator import CameraCalibrator
 
 
 class ImproveData:
-    def __init__(self, checkerboard, path, energy, background, calibration_images):
-        raw_images = glob.glob(f"{path}/{energy}")
+    def __init__(self, checkerboard, path, energy):
+        raw_images = glob.glob(f"{path}/{energy}/*")
+        background = glob.glob(f"{path}/Background/*")
+        calibration_images = glob.glob(f"{path}/Calibration/*")
+
+        self.calibrator = CameraCalibrator(checkerboard, calibration_images)
         self.raw_images = Converter(raw_images).convert_fits2jpeg()
         self.background = Converter(background).convert_fits2jpeg()
+
         self.path = path
         self.energy = energy
         self.undistorted_images = []
         self.cleaned_images = []
-        self.calibrator = CameraCalibrator(checkerboard, calibration_images)
+
+    def get_file_names(self):
+        try:
+            folder_path = f"{self.path}/{self.energy}"
+            extension = ".fit"
+            file_names = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+            file_names_without_extension = [f[:-len(extension)] if f.endswith(extension) else f for f in file_names]
+            return file_names_without_extension
+        except OSError as e:
+            print(f"Error accessing folder: {e}")
+            return []
 
     def remove_background(self):
         for noisy_image in self.raw_images:
@@ -39,16 +54,14 @@ class ImproveData:
             self.undistorted_images.append(undistort[y:y+h, x:x+w])
         return self.undistorted_images
 
-    def get_file_names(self):
-        try:
-            folder_path = f"{self.path}/{self.energy}"
-            extension = ".fit"
-            file_names = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-            file_names_without_extension = [f[:-len(extension)] if f.endswith(extension) else f for f in file_names]
-            return file_names_without_extension
-        except OSError as e:
-            print(f"Error accessing folder: {e}")
-            return []
+    def see_raw_images(self):
+        directory = f"{self.path}/Raw_Data/{self.energy}"
+
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        for count, raw_image in enumerate(self.raw_images):
+            cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), raw_image)
 
     def improve_data(self):
         directory = f"{self.path}/Improved_Data/{self.energy}"
@@ -57,4 +70,4 @@ class ImproveData:
             os.makedirs(directory)
 
         for count, improved_image in enumerate(self.straighten_image()):
-            cv.imwrite("{0}/Calibrated_{1}.png".format(directory, count+1), improved_image)
+            cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), improved_image)
