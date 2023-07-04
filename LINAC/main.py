@@ -1,6 +1,6 @@
 from camera_calibrator import CameraCalibrator
 from images_converter import Converter
-from data_improver import ImproveData
+from images_improver import ImproveData
 import glob
 import os
 import cv2 as cv
@@ -16,13 +16,13 @@ if __name__ == "__main__":
     path = f"Measurements/{date}"
 
     calib = glob.glob(f"{path}/Calibration/*")
-    raw = glob.glob(f"{path}/6MV/*")
     back = glob.glob(f"{path}/Background/*")
+    energy = "6MV"
 
     # Créer les instances des classes
     converter = Converter(calib, path)
     calibrator = CameraCalibrator(CHECKERBOARD, calib)
-    improved = ImproveData(CHECKERBOARD, path, raw, back, calib)
+    improved = ImproveData(CHECKERBOARD, path, energy, back, calib)
 
     # Vérifier le chemin d'accès
     try:
