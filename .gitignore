@@ -1,6 +1,7 @@
 *.vscode
 *.json
 *aux
+*__pycache__
 %*.aux
 %*.bbl
 %*.bcf
