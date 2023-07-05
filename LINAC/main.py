@@ -12,7 +12,7 @@ CHECKERBOARD = (7, 10)
 if __name__ == "__main__":
     # Définir la date pour extraire les images du dossier correspondant
     #date = input("Enter the date of your data acquision (YYYY-MM-DD):")
-    #energy = input("Enter the kind of energy of of your data acquision:")
+    #energy = input("Enter the energy level of your data acquision:")
     date = "2023-06-27"
     energy = "6MV"
     path = f"Measurements/{date}"
