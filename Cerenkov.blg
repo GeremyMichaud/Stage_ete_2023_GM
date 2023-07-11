@@ -1,5 +1,0 @@
-[1] Config.pm:307> INFO - This is Biber 2.19
-[1] Config.pm:310> INFO - Logfile is 'Cerenkov.blg'
-[191] biber-MSWIN64:340> INFO - === 
-[1008] Utils.pm:410> ERROR - Cannot find 'Cerenkov.bcf'!
-[1009] Biber.pm:136> INFO - ERRORS: 1

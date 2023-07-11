@@ -2,7 +2,6 @@
 \usepackage[french]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[autostyle=once,french=guillemets]{csquotes}
-\usepackage[style=apa,sortcites=true,sorting=nyt]{biblatex}
 \usepackage{ulem}
 \usepackage{graphicx}
 \usepackage[margin=1in]{geometry} 
@@ -11,7 +10,7 @@
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{enumitem}
-\usepackage{biblatex}
+\usepackage[backend=biber, style=numeric, citestyle=numeric-comp, sorting=none]{biblatex}
 \usepackage[margin=2cm]{caption}
 \usepackage[usenames,dvipsnames]{xcolor}
 
@@ -32,7 +31,7 @@ separate-uncertainty = true}
 
 %  Page d'abstract
 \newcommand*{\resumefrancais}{
-\thispagestyle{empty}
+%\thispagestyle{empty}
 \begingroup
     \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
 	\begin{center}
@@ -47,9 +46,9 @@ separate-uncertainty = true}
 	\vspace{7.5pt}
 	\noindent$^2$Service de physique médicale et de radioprotection, Centre intégré de cancérologie, CHU de Québec-Université Laval et Centre de recherche du CHU de Québec, Québec, Québec, Canada \\
     \resume \\
-	\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
 	\vspace*{\fill}
-    \vfill\null
+	\vfill\null
+	\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
 \endgroup}
 
 
