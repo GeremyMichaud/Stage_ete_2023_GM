@@ -18,7 +18,7 @@
 
 
 % ---------------
-% Classe custom pour les devoirs.
+% Classe custom pour les documents scientifiques.
 % Par Gérémy "Ken" Michaud
 % ---------------
 
