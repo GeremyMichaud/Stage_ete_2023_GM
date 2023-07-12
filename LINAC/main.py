@@ -9,10 +9,10 @@ CHECKERBOARD = (7, 10)
 
 if __name__ == "__main__":
     # Définir la date pour extraire les images du dossier correspondant
-    date = input("Enter the date of your data acquision (YYYY-MM-DD):")
-    energy = input("Enter the energy level of your data acquision:")
-    #date = "2023-06-27"
-    #energy = "6MV"
+    #date = input("Enter the date of your data acquision (YYYY-MM-DD):")
+    #energy = input("Enter the energy level of your data acquision:")
+    date = "2023-06-27"
+    energy = "6MV"
     path = f"Measurements/{date}"
 
     calib = glob.glob(f"{path}/Calibration/*")
@@ -33,6 +33,6 @@ if __name__ == "__main__":
 
     # Appeler les méthodes de calibration de la caméra
     #calibrator.print_calib_coeff()
-    #calibrator.show_chessboard_corners()
+    calibrator.show_chessboard_corners()
     #calibrator.reprojection_error()
     #calibrator.undistort_calibration_images()
