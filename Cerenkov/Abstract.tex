@@ -1,4 +1,4 @@
-%% Abstract.tex
+%% Abstract.texwait
 %% Copyright 2023 G. Michaud
 %% ctrl+alt+j To find something in the PDF SyncTeX
 
@@ -6,29 +6,30 @@
 \input{AbstractStructure.tex}
 \bibliography{Cerenkov.bib}
 
-\titrefrancais{Optimisation de la dosimétrie optique dans un fantôme d'eau en exploitant l'imagerie de polarisation du rayonnement Tcherenkov}
+\titrefrancais{Optimisation de la dosimétrie optique dans un fantôme d'eau en exploitant l'imagerie de polarisation du rayonnement Cherenkov}
 
 \premierauteur{Gérémy Michaud$^{1, 2}$}
 \deuxiemeauteur{Émily Cloutier$^{1, 2}$}
 \troisiemeauteur{Louis Archambault$^{1, 2}$}
 \quatriemeauteur{Luc Beaulieu$^{1, 2}$}
+\cinquiemeauteur{Tigran Galstian$^{3}$}
 
 \resume{
 
-\noindent\textbf{Introduction: } Le rayonnement Tcherenkov se produit lorsqu'une particule chargée se déplace à une vitesse
+\noindent\textbf{Introduction: } Le rayonnement Cherenkov se produit lorsqu'une particule chargée se déplace à une vitesse
 supérieure à celle de la lumière dans un milieu diélectrique \cite{cerenkovVisibleRadiationProduced1937}.
 Ce phénomène génère de la lumière polarisée qui peut être exploitée pour détecter et quantifier les distributions de dose de radiation dans
 des applications médicales telles que la radiothérapie \cite{ashrafDosimetryFLASHRadiotherapy2020}.
-En utilisant la lumière Tcherenkov émise par le milieu irradié, cette méthode
+En utilisant la lumière Cherenkov émise par le milieu irradié, cette méthode
 prometteuse permet une évaluation en temps réel de la distribution de dose \cite{jarvisCherenkovVideoImaging2014}.
-Cette étude se base sur les travaux de \citeauthor{cloutierAccurateDoseMeasurements2022} \cite{cloutierAccurateDoseMeasurements2022, cloutierDirectInwaterRadiation2022}
-et vise à valider les méthodes de dosimétrie optique dans un fantôme d'eau par polarisation du rayonnement Tcherenkov tout en améliorant leur précision.
+Cette étude se base sur les travaux antérieurs du groupe de recherche \cite{cloutierAccurateDoseMeasurements2022, cloutierDirectInwaterRadiation2022}
+et vise à valider les méthodes de dosimétrie optique dans un fantôme d'eau par polarisation du rayonnement Cherenkov tout en améliorant leur précision.
 
 \vspace{7.5pt}
-\noindent\textbf{Méthodes: } Pour ce faire,  le signal d'émission Tcherenkov est capturé à l'aide d'une caméra équipée d'un capteur d'image à transfert de charge (CCD)
+\noindent\textbf{Méthodes: } Pour ce faire,  le signal d'émission Cherenkov est capturé à l'aide d'une caméra équipée d'un capteur d'image à transfert de charge (CCD)
 lors de l'irradiation d'une cuve d'eau de dimensions $15\times 15\times\SI{20}{cm^3}$ par des faisceaux de photons et
 d'électrons de différentes énergies, notamment $\SI{6}{MV}$, $\SI{18}{MV}$, $\SI{6}{MeV}$ et $\SI{18}{MeV}$.
-L'analyse de la polarisation du rayonnement Tcherenkov est réalisée en utilisant un polariseur linéaire rotatif du système Patqer.
+L'analyse de la polarisation du rayonnement Cherenkov est réalisée en utilisant un polariseur linéaire rotatif ainsi qu'un polariseur à cristaux liquides de la compagnie Patqer.
 Les images capturées à différents angles de transmission sont ensuite utilisées pour reconstruire l'image polarisée en appliquant la loi de Malus \cite{collettFieldGuidePolarization2012}.
 Cette approche permet d'extraire la contribution polarisée du signal, l’angle moyen de polarisation et la partie non polarisée du signal.
 À titre de référence, des films radiochromiques et des données provenant d'un système de planification de traitement sont utilisés en parallèle avec les données expérimentales. 
