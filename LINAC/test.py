@@ -2,7 +2,7 @@ import cv2
 from astropy.io import fits
 
 # Load the .fit image
-fit_image = fits.open("Measurements/2023-06-27/Background/10sec_0001.fit")
+fit_image = fits.open("Measurements/2023-06-27/Calibration/1sec_0001.fit")
 
 # Extract the image data from the FITS file
 image_data = fit_image[0].data
@@ -10,7 +10,7 @@ image_data = fit_image[0].data
 # Normalize the pixel values to the 0-255 range
 image_damier = cv2.normalize(image_data, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
 
-cv2.show()
+cv2.imshow("Damier", image_damier)
 
 # Application d'une opération de seuillage pour convertir en image binaire
 _, threshold = cv2.threshold(image_damier, 128, 255, cv2.THRESH_BINARY)
