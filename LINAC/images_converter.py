@@ -12,19 +12,19 @@ class Converter:
         """
         self.images = images
         self.path = path
-        self.jpeg_images_data = []
+        self.png_images_data = []
 
-    def convert_fits2jpeg(self):
-        """Convertit une liste d'images FITS en images JPEG normalisées.
+    def convert_fits2png(self):
+        """Convertit une liste d'images FITS en images png normalisées.
 
         Returns:
-            list: Une liste contenant les données des images JPEG normalisées pour chaque image FITS.
+            list: Une liste contenant les données des images png normalisées pour chaque image FITS.
         """
         for fits_path in self.images:
             fits_data = fits.open(fits_path)
             fits_image_data = fits_data[0].data
-            self.jpeg_images_data.append(cv.normalize(fits_image_data, None, 0, 255, cv.NORM_MINMAX, dtype=cv.CV_8U))
-        return self.jpeg_images_data
+            self.png_images_data.append(cv.normalize(fits_image_data, None, 0, 255, cv.NORM_MINMAX, dtype=cv.CV_8U))
+        return self.png_images_data
 
     def verify_file_path(self):
         """Vérifie si le chemin d'accès de fichier existe.

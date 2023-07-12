@@ -22,7 +22,7 @@ class CameraCalibrator:
         self.objp = objp
 
         converter = Converter(fits_images)
-        self.images = converter.convert_fits2jpeg()
+        self.images = converter.convert_fits2png()
 
     def find_chessboard_corners(self, image_data):
         """Trouver les coins du damier sur une seule image.
@@ -50,15 +50,15 @@ class CameraCalibrator:
             rvecs (list) : Liste des vecteurs de rotation pour chaque image.
             tvecs (list) : Liste des vecteurs de translation pour chaque image.
         """
-        for jpeg_image_data in self.images:
+        for png_image_data in self.images:
             # Trouver les coins du damier sur l'image actuelle
-            ret, corners = self.find_chessboard_corners(jpeg_image_data)
+            ret, corners = self.find_chessboard_corners(png_image_data)
             if ret:
                 # Si des coins sont trouvés, ajouter les coordonnées 3D et 2D aux vecteurs objpoints et imgpoints
                 self.objpoints.append(self.objp)
                 self.imgpoints.append(corners)
 
-        framesize = jpeg_image_data.shape[:2]  # 1392 X 1040 pixels
+        framesize = png_image_data.shape[:2]  # 1392 X 1040 pixels
 
         try:
             # Effectuer la calibration de la caméra en utilisant les vecteurs objpoints et imgpoints
@@ -104,12 +104,12 @@ class CameraCalibrator:
     def show_chessboard_corners(self):
         """Afficher les coins du damier sur les images données.
         """
-        for jpeg_image_data in self.images:
+        for png_image_data in self.images:
             # Trouver les coins du damier sur l'image actuelle
-            ret, corners = self.find_chessboard_corners(jpeg_image_data)
+            ret, corners = self.find_chessboard_corners(png_image_data)
             if ret:
                 # Dessiner et afficher les coins trouvés sur l'image
-                img = cv.drawChessboardCorners(jpeg_image_data, self.checkerboard, corners, ret)
+                img = cv.drawChessboardCorners(png_image_data, self.checkerboard, corners, ret)
                 cv.imshow("Detected Corners", img)
                 cv.waitKey(2000)  # Afficher l'image pendant 2000 millisecondes
         cv.destroyAllWindows()
@@ -120,12 +120,12 @@ class CameraCalibrator:
         """
         _, mtx, dist, _, _ = self.calibrate_camera()
 
-        for jpeg_image_data in self.images:
-            framesize = jpeg_image_data.shape[:2]
+        for png_image_data in self.images:
+            framesize = png_image_data.shape[:2]
             # Obtenir une nouvelle matrice de caméra optimale et une région d'intérêt (ROI) pour l'image corrigée
             newCameraMatrix, roi = cv.getOptimalNewCameraMatrix(mtx, dist, framesize[::-1], 1,  framesize[::-1])
             # Appliquer la correction de distorsion à l'image
-            undistort = cv.undistort(jpeg_image_data, mtx, dist, None, newCameraMatrix)
+            undistort = cv.undistort(png_image_data, mtx, dist, None, newCameraMatrix)
             # Recadrer l'image à la région d'intérêt (ROI)
             x, y, w, h = roi
             cv.imshow("Undistorted calibration images", undistort[y:y+h, x:x+w])
