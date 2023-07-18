@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 from images_converter import Converter
+import ast
 
 
 class CameraCalibrator:
@@ -75,16 +76,17 @@ class CameraCalibrator:
 
         if ret:
             # Afficher les résultats de la calibration
-            print(f"Overall RMS reprojection error : {ret}")
+            np.set_printoptions(precision=4)
+            print(f"Overall RMS reprojection error : {ret:.4f}")
             print(f"\nCamera Matrix : \n{mtx}")
-            print(f"\nFocal lenght in x direction : {mtx[0,0]}")
-            print(f"Focal lenght in y direction : {mtx[1,1]}")
-            print(f"Optical center : ({mtx[0,2]}, {mtx[1,2]})")
+            print(f"\nFocal lenght in x direction : {mtx[0,0]:.4f}")
+            print(f"Focal lenght in y direction : {mtx[1,1]:.4f}")
+            print(f"Optical center : ({mtx[0,2]:.4f}, {mtx[1,2]:.4f})")
             print(f"\nDistortion Parameters : \n{dist}")
             print(f"\nRotation Vectors :")
             for rvec in rvecs:
                 print(rvec.tolist())
-            print(f"\nTranslation Vectors :")
+            print("\nTranslation Vectors:")
             for tvec in tvecs:
                 print(tvec.tolist())
         else:
@@ -99,7 +101,7 @@ class CameraCalibrator:
             imgpoints2, _ = cv.projectPoints(self.objpoints[i], rvecs[i], tvecs[i], mtx, dist)
             error = cv.norm(self.imgpoints[i], imgpoints2, cv.NORM_L2)/len(imgpoints2)
             mean_error += error
-        print("Reprojection error : {}".format(mean_error/len(self.objpoints)))
+        print("Reprojection error : {:.4f}".format(mean_error/len(self.objpoints)))
 
     def show_chessboard_corners(self):
         """Afficher les coins du damier sur les images données.

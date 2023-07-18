@@ -33,6 +33,6 @@ if __name__ == "__main__":
 
     # Appeler les méthodes de calibration de la caméra
     #calibrator.print_calib_coeff()
-    calibrator.show_chessboard_corners()
+    #calibrator.show_chessboard_corners()
     #calibrator.reprojection_error()
     #calibrator.undistort_calibration_images()
