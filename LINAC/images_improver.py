@@ -7,6 +7,14 @@ from camera_calibrator import CameraCalibrator
 
 class ImproveData:
     def __init__(self, checkerboard, diagonal_square_size, path, energy):
+        """Classe pour améliorer les données d'images en enlevant l'arrière-plan et en redressant les images.
+
+        Args:
+            checkerboard (tuple): Un tuple contenant le nombre de coins du damier dans les directions x et y.
+            diagonal_square_size (float): Taille de la diagonale d'un carré du damier en millimètres.
+            path (str): Chemin du répertoire contenant les images.
+            energy (str): Nom de l'énergie des images.
+        """
         raw_images = glob.glob(f"{path}/{energy}/*")
         background = glob.glob(f"{path}/Background/*")
         calibration_images = glob.glob(f"{path}/Calibration/*")
@@ -21,6 +29,11 @@ class ImproveData:
         self.cleaned_images = []
 
     def get_file_names(self):
+        """Récupère les noms de fichiers des images.
+
+        Returns:
+            list: Liste des noms de fichiers des images sans extension.
+        """
         try:
             folder_path = f"{self.path}/{self.energy}"
             extension = ".fit"
@@ -32,6 +45,14 @@ class ImproveData:
             return []
 
     def remove_background(self):
+        """Supprime l'arrière-plan des images brutes.
+
+        Raises:
+            ValueError: Si les images n'ont pas les mêmes dimensions.
+
+        Returns:
+            list: Liste des images sans l'arrière-plan.
+        """
         for noisy_image in self.raw_images:
             # Vérifier que les images ont les mêmes dimensions
             if noisy_image.shape != self.background[0].shape:
@@ -42,6 +63,11 @@ class ImproveData:
         return self.cleaned_images
 
     def straighten_image(self):
+        """Redresse les images en corrigeant la distorsion.
+
+        Returns:
+            list: Liste des images redressées et corrigées de la distorsion
+        """
         _, mtx, dist, _, _ = self.calibrator.calibrate_camera()
         for dist_image in self.remove_background():
             framesize = dist_image.shape[:2]
@@ -55,6 +81,8 @@ class ImproveData:
         return self.undistorted_images
 
     def see_raw_images(self):
+        """Enregistre les images brute dans un répertoire 'Raw_Data'.
+        """
         directory = f"{self.path}/Raw_Data/{self.energy}"
 
         if not os.path.exists(directory):
@@ -64,6 +92,9 @@ class ImproveData:
             cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), raw_image)
 
     def improve_data(self):
+        """Améliore les images en supprimant l'arrière-plan et les redressant.
+        Les images améliorées sont enregistrées dans un répertoire 'Improved_Data'.
+        """
         directory = f"{self.path}/Improved_Data/{self.energy}"
 
         if not os.path.exists(directory):
