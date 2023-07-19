@@ -5,11 +5,12 @@ import ast
 
 
 class CameraCalibrator:
-    def __init__(self, checkerboard, fits_images):
+    def __init__(self, checkerboard, diagonal_square_size, fits_images):
         """Initialiser le calibrateur de caméra avec le damier spécifié.
 
         Args:
             checkerboard (tuple): Un tuple contenant le nombre de coins du damier dans les directions x et y.
+            diagonal_square_size (float or int): Taille de la diagonale d'un carré du damier en mm.
             fits_images (list): Liste des données d'images FITS utilisées pour la calibration.
         """
         self.checkerboard = checkerboard
@@ -22,7 +23,7 @@ class CameraCalibrator:
 
         self.objp = objp
 
-        converter = Converter(fits_images, checkerboard)
+        converter = Converter(fits_images, checkerboard, diagonal_square_size)
         self.images = converter.convert_fits2png()
 
     def find_chessboard_corners(self, image_data):

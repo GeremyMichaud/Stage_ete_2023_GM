@@ -6,6 +6,7 @@ import glob
 
 # Définir la taille du damier (nombre de coins intérieurs par ligne et colonne)
 CHECKERBOARD = (7, 10)
+DIAGONALE = 25
 
 if __name__ == "__main__":
     # Définir la date pour extraire les images du dossier correspondant
@@ -18,9 +19,9 @@ if __name__ == "__main__":
     calib = glob.glob(f"{path}/Calibration/*")
 
     # Créer les instances des classes
-    converter = Converter(calib, CHECKERBOARD, path)
-    calibrator = CameraCalibrator(CHECKERBOARD, calib)
-    improved = ImproveData(CHECKERBOARD, path, energy)
+    converter = Converter(calib, CHECKERBOARD, DIAGONALE, path)
+    calibrator = CameraCalibrator(CHECKERBOARD, DIAGONALE, calib)
+    improved = ImproveData(CHECKERBOARD, DIAGONALE, path, energy)
 
     # Vérifier le chemin d'accès
     try:
@@ -38,4 +39,5 @@ if __name__ == "__main__":
     #calibrator.undistort_calibration_images()
 
     # Appeler les méthodes de conversion de pixel à mm
-    converter.print_pixel2mm_factors(25)
+    #converter.print_pixel2mm_factors()
+    #converter.show_central_axis(5)

@@ -6,14 +6,14 @@ from camera_calibrator import CameraCalibrator
 
 
 class ImproveData:
-    def __init__(self, checkerboard, path, energy):
+    def __init__(self, checkerboard, diagonal_square_size, path, energy):
         raw_images = glob.glob(f"{path}/{energy}/*")
         background = glob.glob(f"{path}/Background/*")
         calibration_images = glob.glob(f"{path}/Calibration/*")
 
-        self.calibrator = CameraCalibrator(checkerboard, calibration_images)
-        self.raw_images = Converter(raw_images, checkerboard).convert_fits2png()
-        self.background = Converter(background, checkerboard).convert_fits2png()
+        self.calibrator = CameraCalibrator(checkerboard, diagonal_square_size, calibration_images)
+        self.raw_images = Converter(raw_images, checkerboard, diagonal_square_size).convert_fits2png()
+        self.background = Converter(background, checkerboard, diagonal_square_size).convert_fits2png()
 
         self.path = path
         self.energy = energy

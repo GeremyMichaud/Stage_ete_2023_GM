@@ -4,16 +4,18 @@ import numpy as np
 import os
 
 class Converter:
-    def __init__(self, images, checkerboard, path=None):
+    def __init__(self, images, checkerboard, diagonal_square_size, path=None):
         """Initialise un objet Converter.
 
         Args:
             images (list): Une liste contenant les FITS images à convertir.
             checkerboard (tuple): Un tuple contenant le nombre de coins du damier dans les directions x et y.
+            diagonal_square_size (float or int): Taille de la diagonale d'un carré du damier en mm.
             path (str, optional): Le chemin vers le dossier à vérifier. Par défaut, il est défini à None.
         """
         self.images = images
         self.checkerboard = checkerboard
+        self.diagonal_square_size = diagonal_square_size
         self.path = path
         self.png_images_data = []
 
@@ -38,11 +40,8 @@ class Converter:
         if not os.path.exists(self.path):
             raise FileNotFoundError(f"The path {self.path} does not exist.")
 
-    def convert_pixel2mm(self, diagonal_square_size):
+    def convert_pixel2mm(self):
         """Convertit les pixels en millimètres en utilisant les coins d'un damier trouvé dans l'image.
-
-        Args:
-            diagonal_square_size (float or int): Taille de la diagonale d'un carré du damier en mm.
 
         Raises:
             ValueError: Si aucun damier n'est trouvé dans l'image ou si aucune paire de coins consécutifs
@@ -50,10 +49,10 @@ class Converter:
 
         Returns:
             tuple: Un tuple contenant le facteur de conversion pixel vers mm, la distance moyenne entre les coins
-                du damier en pixels et l'écart-type des distances entre les coins en pixels.
+                du damier en pixels, l'écart-type des distances entre les coins en pixels et la position des coins en pixel.
         """
         # Taille réelle du carré en millimètres
-        real_square_size = np.sqrt(diagonal_square_size ** 2 / 2)
+        real_square_size = np.sqrt(self.diagonal_square_size ** 2 / 2)
         image_data = self.convert_fits2png()[0]
         ret, corners = cv.findChessboardCorners(image_data, self.checkerboard, cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_FAST_CHECK + cv.CALIB_CB_NORMALIZE_IMAGE)
 
@@ -81,20 +80,60 @@ class Converter:
         std_distance = np.std(distances)
         pixel2mm_factor = real_square_size / avg_distance
 
-        return pixel2mm_factor, avg_distance, std_distance
+        return pixel2mm_factor, avg_distance, std_distance, corners
 
-    def print_pixel2mm_factors(self, diagonal_square_size):
+    def print_pixel2mm_factors(self):
         """Affiche les facteurs de conversion de pixels en millimètres, la distance moyenne entre les coins du damier
         en pixels, l'écart-type des distances entre les coins en pixels et le nombre de pixels par millimètre.
 
         Args:
             diagonal_square_size (float or int): Taille de la diagonale d'un carré du damier en mm.
         """
-        factors = self.convert_pixel2mm(diagonal_square_size)
-        real_square_size = np.sqrt(diagonal_square_size ** 2 / 2)
+        factors = self.convert_pixel2mm()
+        real_square_size = np.sqrt(self.diagonal_square_size ** 2 / 2)
         pixel_per_mm = 1 / factors[0]
 
         print(f"The average distance between consecutive corners on the same line is: {factors[1]:.3f} pixels.")
         print(f"The standard deviation of distances between checkerboard corners is: {factors[2]:.3f} pixels.")
         print(f"Considering the actual distance between 2 consecutive corners is {real_square_size:.3f} mm,",
             f"this means there are {pixel_per_mm:.3f} pixels per mm.")
+
+    def central_axis(self):
+        """Calcule la coordonnée de l'axe central vertical de l'image.
+
+        Returns:
+            int: La coordonnée de l'axe central vertical.
+        """
+        image_data = self.convert_fits2png()[0]
+
+        # Calculer les coordonnées de l'axe central vertical
+        central_axis = image_data[0].size // 2
+
+        return central_axis
+
+    def show_central_axis(self, target_square_index):
+        """Affiche l'axe central vertical et un point sur le coin cible de l'image.
+
+        Args:
+            target_square_index (int): L'index du coin cible dans la liste des coins du damier.
+        """
+        corners = self.convert_pixel2mm()[3]
+        target_square_corner = corners[target_square_index]
+        central_axis = self.central_axis()
+
+        # Extraire les coordonnées du coin cible
+        x, y = target_square_corner.ravel().astype(int)
+
+        # Créer une copie colorisée de l'image
+        image_color = cv.cvtColor(self.convert_fits2png()[0], cv.COLOR_GRAY2BGR)
+
+        # Dessiner un point sur le coin cible
+        cv.circle(image_color, (x, y), 4, (0, 0, 255), -1)
+
+        # Dessiner une ligne verticale sur l'axe central
+        cv.line(image_color, (central_axis, 0), (central_axis, image_color.shape[0]), (0, 255, 0), 1)
+
+        # Afficher l'image avec le point et la ligne
+        cv.imshow("Target corner and center axis", image_color)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
