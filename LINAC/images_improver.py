@@ -12,8 +12,8 @@ class ImproveData:
         calibration_images = glob.glob(f"{path}/Calibration/*")
 
         self.calibrator = CameraCalibrator(checkerboard, calibration_images)
-        self.raw_images = Converter(raw_images).convert_fits2png()
-        self.background = Converter(background).convert_fits2png()
+        self.raw_images = Converter(raw_images, checkerboard).convert_fits2png()
+        self.background = Converter(background, checkerboard).convert_fits2png()
 
         self.path = path
         self.energy = energy

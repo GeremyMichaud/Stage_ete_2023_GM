@@ -22,7 +22,7 @@ class CameraCalibrator:
 
         self.objp = objp
 
-        converter = Converter(fits_images)
+        converter = Converter(fits_images, checkerboard)
         self.images = converter.convert_fits2png()
 
     def find_chessboard_corners(self, image_data):

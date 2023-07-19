@@ -18,7 +18,7 @@ if __name__ == "__main__":
     calib = glob.glob(f"{path}/Calibration/*")
 
     # Créer les instances des classes
-    converter = Converter(calib, path)
+    converter = Converter(calib, CHECKERBOARD, path)
     calibrator = CameraCalibrator(CHECKERBOARD, calib)
     improved = ImproveData(CHECKERBOARD, path, energy)
 
@@ -36,3 +36,6 @@ if __name__ == "__main__":
     #calibrator.show_chessboard_corners()
     #calibrator.reprojection_error()
     #calibrator.undistort_calibration_images()
+
+    # Appeler les méthodes de conversion de pixel à mm
+    converter.print_pixel2mm_factors(25)
