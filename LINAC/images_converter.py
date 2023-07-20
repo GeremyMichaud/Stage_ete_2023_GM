@@ -17,7 +17,7 @@ class Converter:
         self.checkerboard = checkerboard
         self.diagonal_square_size = diagonal_square_size
         self.path = path
-        self.png_images_data = []
+        self.png_16bit_images_data = []
 
     def convert_fits2png(self):
         """Convertit une liste d'images FITS en images png normalisées.
@@ -28,8 +28,9 @@ class Converter:
         for fits_path in self.images:
             fits_data = fits.open(fits_path)
             fits_image_data = fits_data[0].data
-            self.png_images_data.append(cv.normalize(fits_image_data, None, 0, 255, cv.NORM_MINMAX, dtype=cv.CV_8U))
-        return self.png_images_data
+            # Convertir les images FITS en 16-bit PNG (range 0-65535)
+            self.png_16bit_images_data.append(((fits_image_data - fits_image_data.min()) / (fits_image_data.max() - fits_image_data.min()) * 65535).astype(np.uint16))
+        return self.png_16bit_images_data
 
     def verify_file_path(self):
         """Vérifie si le chemin d'accès de fichier existe.

@@ -1,7 +1,6 @@
 import cv2 as cv
 import numpy as np
 from images_converter import Converter
-import ast
 
 
 class CameraCalibrator:
@@ -33,13 +32,15 @@ class CameraCalibrator:
             ret (bool) : True si les coins du damier sont trouvés, False sinon.
             corners (numpy.ndarray) : Tableau contenant les coordonnées des coins du damier.
         """
-        ret, corners = cv.findChessboardCorners(image_data, self.checkerboard, cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_FAST_CHECK + cv.CALIB_CB_NORMALIZE_IMAGE)
+        # Retransformer en 8-bit PNG, puisque le module findChessboardCorners ne fonctionne qu'avec ce type de données
+        image_8bit = ((image_data - image_data.min()) / (image_data.max() - image_data.min()) * 255).astype(np.uint8)
+        ret, corners = cv.findChessboardCorners(image_8bit, self.checkerboard, cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_FAST_CHECK + cv.CALIB_CB_NORMALIZE_IMAGE)
         if ret:
             # Spécifier les paramètres pour les critères d'arrêt
             # Dans ce cas, 30 indique le nombre maximal d'itérations autorisées et 0.001 indique la précision (epsilon) à atteindre
             criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
             # Affiner les coordonnées des coins trouvés pour une meilleure précision
-            corners = cv.cornerSubPix(image_data, corners, (11, 11), (-1, -1), criteria)
+            corners = cv.cornerSubPix(image_8bit, corners, (11, 11), (-1, -1), criteria)
         return ret, corners
 
     def calibrate_camera(self):
