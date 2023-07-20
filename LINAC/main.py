@@ -12,7 +12,7 @@ if __name__ == "__main__":
     # Définir la date pour extraire les images du dossier correspondant
     #date = input("Enter the date of your data acquision (YYYY-MM-DD):")
     #energy = input("Enter the energy level of your data acquision:")
-    date = "2023-07-10"
+    date = "2023-06-27"
     energy = "6MV"
     path = f"Measurements/{date}"
 
@@ -39,5 +39,5 @@ if __name__ == "__main__":
     #calibrator.undistort_calibration_images()
 
     # Appeler les méthodes de conversion de pixel à mm
-    #converter.print_pixel2mm_factors()
-    #converter.show_central_axis(5)
+    #converter.print_pixel2mm_factors(0)
+    #converter.calib_show_central_axis(5, 0)

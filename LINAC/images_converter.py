@@ -41,8 +41,11 @@ class Converter:
         if not os.path.exists(self.path):
             raise FileNotFoundError(f"The path {self.path} does not exist.")
 
-    def convert_pixel2mm(self):
+    def convert_pixel2mm(self, calib_image_index):
         """Convertit les pixels en millimètres en utilisant les coins d'un damier trouvé dans l'image.
+
+        Args:
+            calib_image_index (int): L'indice de l'image de calibration à montrer dans l'ordre qu'elle est dans le fichier d'origine.
 
         Raises:
             ValueError: Si aucun damier n'est trouvé dans l'image ou si aucune paire de coins consécutifs
@@ -54,8 +57,10 @@ class Converter:
         """
         # Taille réelle du carré en millimètres
         real_square_size = np.sqrt(self.diagonal_square_size ** 2 / 2)
-        image_data = self.convert_fits2png()[0]
-        ret, corners = cv.findChessboardCorners(image_data, self.checkerboard, cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_FAST_CHECK + cv.CALIB_CB_NORMALIZE_IMAGE)
+        image_data = self.convert_fits2png()[calib_image_index]
+        # Retransformer en 8-bit PNG, puisque le module findChessboardCorners ne fonctionne qu'avec ce type de données
+        image_8bit = ((image_data - image_data.min()) / (image_data.max() - image_data.min()) * 255).astype(np.uint8)
+        ret, corners = cv.findChessboardCorners(image_8bit, self.checkerboard, cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_FAST_CHECK + cv.CALIB_CB_NORMALIZE_IMAGE)
 
         if not ret:
             raise ValueError("No checkerboard found in the image.")
@@ -64,7 +69,7 @@ class Converter:
         # Dans ce cas, 30 indique le nombre maximal d'itérations autorisées et 0.001 indique la précision (epsilon) à atteindre
         criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
         # Affiner les coordonnées des coins trouvés pour une meilleure précision
-        corners = cv.cornerSubPix(image_data, corners, (11, 11), (-1, -1), criteria)
+        corners = cv.cornerSubPix(image_8bit, corners, (11, 11), (-1, -1), criteria)
 
         distances = []
         for i in range(len(corners) - 1):
@@ -83,14 +88,14 @@ class Converter:
 
         return pixel2mm_factor, avg_distance, std_distance, corners
 
-    def print_pixel2mm_factors(self):
+    def print_pixel2mm_factors(self, calib_image_index):
         """Affiche les facteurs de conversion de pixels en millimètres, la distance moyenne entre les coins du damier
         en pixels, l'écart-type des distances entre les coins en pixels et le nombre de pixels par millimètre.
 
         Args:
-            diagonal_square_size (float or int): Taille de la diagonale d'un carré du damier en mm.
+            calib_image_index (int): L'indice de l'image de calibration à montrer dans l'ordre qu'elle est dans le fichier d'origine.
         """
-        factors = self.convert_pixel2mm()
+        factors = self.convert_pixel2mm(calib_image_index)
         real_square_size = np.sqrt(self.diagonal_square_size ** 2 / 2)
         pixel_per_mm = 1 / factors[0]
 
@@ -103,30 +108,36 @@ class Converter:
         """Calcule la coordonnée de l'axe central vertical de l'image.
 
         Returns:
-            int: La coordonnée de l'axe central vertical.
+            list: Une liste de la coordonnée de l'axe central vertical de chaque image du fichier.
         """
-        image_data = self.convert_fits2png()[0]
+        images_data = self.convert_fits2png()
+        central_axis = []
 
-        # Calculer les coordonnées de l'axe central vertical
-        central_axis = image_data[0].size // 2
+        for image in images_data:
+            # Calculer les coordonnées de l'axe central vertical
+            central_axis.append(image[0].size // 2)
 
         return central_axis
 
-    def show_central_axis(self, target_square_index):
-        """Affiche l'axe central vertical et un point sur le coin cible de l'image.
+    def calib_show_central_axis(self, target_square_index, calib_image_index):
+        """Affiche l'axe central vertical et un point sur le coin cible de l'image du damier.
 
         Args:
-            target_square_index (int): L'index du coin cible dans la liste des coins du damier.
+            target_square_index (int): L'indice du coin cible dans la liste des coins du damier.
+            calib_image_index (int): L'indice de l'image de calibration à montrer dans l'ordre qu'elle est dans le fichier d'origine.
         """
-        corners = self.convert_pixel2mm()[3]
+        corners = self.convert_pixel2mm(calib_image_index)[3]
         target_square_corner = corners[target_square_index]
-        central_axis = self.central_axis()
+        central_axis = self.central_axis()[calib_image_index]
 
         # Extraire les coordonnées du coin cible
         x, y = target_square_corner.ravel().astype(int)
 
-        # Créer une copie colorisée de l'image
-        image_color = cv.cvtColor(self.convert_fits2png()[0], cv.COLOR_GRAY2BGR)
+        # Normaliser l'image de 16 bits à une plage de 0-255 (8 bits)
+        normalized_image = cv.normalize(self.convert_fits2png()[calib_image_index], None, 0, 255, cv.NORM_MINMAX, dtype=cv.CV_8U)
+
+        # Convertir en couleur en utilisant un nuance de gris pour chaque canal
+        image_color = cv.cvtColor(normalized_image, cv.COLOR_GRAY2BGR)
 
         # Dessiner un point sur le coin cible
         cv.circle(image_color, (x, y), 4, (0, 0, 255), -1)
