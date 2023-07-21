@@ -8,7 +8,7 @@ class Converter:
         """Initialise un objet Converter.
 
         Args:
-            images (list): Une liste contenant les FITS images à convertir.
+            images (list): Une liste contenant les chemins d'accès des images à convertir.
             checkerboard (tuple): Un tuple contenant le nombre de coins du damier dans les directions x et y.
             diagonal_square_size (float or int): Taille de la diagonale d'un carré du damier en milimètres.
             path (str, optional): Le chemin vers le dossier à vérifier. Par défaut, il est défini à None.

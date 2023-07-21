@@ -2,9 +2,8 @@ from images_converter import Converter
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import glob
-from PIL import Image
-import scipy
 
 
 class Profile:
@@ -41,7 +40,7 @@ class Profile:
 
         for improved_image in self.improved_images:
             img = plt.imread(improved_image)
-            intensity = np.mean(img, axis=1)
+            intensity = np.mean(img, axis=0)
             intensity_list.append(list(intensity))
             max_index = np.argmax(intensity)
             max_value_list.append(intensity[max_index])
@@ -49,63 +48,68 @@ class Profile:
 
         return intensity_list, max_value_list, max_index_list
 
-    def remove_outliers(self, intensity_profile):
-        # Assuming intensity_profile is a 1D numpy array or list of intensity values
-        # Calculate the mean intensity in the first half of the y-axis
-        half_y = len(intensity_profile) // 2
-        mean_first_half = np.mean(intensity_profile[:half_y])
-
-        # Filter out data points in the second half that do not follow the decreasing trend
-        filtered_intensity = [intensity if intensity >= mean_first_half else np.nan for intensity in intensity_profile]
-
-        # Interpolate missing values (set by np.nan) using linear interpolation
-        filtered_intensity = np.array(filtered_intensity)
-        not_nan_indices = ~np.isnan(filtered_intensity)
-        filtered_intensity[~not_nan_indices] = np.interp(
-            np.flatnonzero(~not_nan_indices), np.flatnonzero(not_nan_indices), filtered_intensity[not_nan_indices]
-        )
-
-        return filtered_intensity
+    def curve_fft(self, x_data_graph):
+        # Calcul de la transformée de Fourier discrète (DFT)
+        coeff_dft = np.fft.rfft(x_data_graph)
+        # Calcul du seuil pour conserver les premiers 10% des coefficients
+        dft_thresholded_10 = coeff_dft.copy()
+        ten_percent = int(0.1*len(dft_thresholded_10))
+        # Application du seuil pour ramener à zéro les 90% restants
+        dft_thresholded_10[ten_percent:] = 0
+        reconstructed_data = np.fft.irfft(dft_thresholded_10)
+        return reconstructed_data
 
     def central_axis(self):
         central_axis = []
         for improved_image in self.improved_images:
             img = plt.imread(improved_image)
             central_axis.append(img[0].size // 2)
+        print(central_axis)
         return central_axis
+
+    @staticmethod
+    def find_plateau_center(intensity_profile, tolerance=0.05):
+        # Find the plateau region (where the intensity remains constant)
+        plateau_indices = np.where(np.abs(np.diff(intensity_profile)) <= tolerance)[0]
+        plateau_center_index = int(np.mean(plateau_indices))
+        return plateau_center_index
 
     def plot_grayvalue_profile(self):
         intensity_profiles = self.grayvalues()[0]
-        directory = f"{self.path}/Test/{self.energy}"
+        directory = f"{self.path}/Profile/{self.energy}"
         if not os.path.exists(directory):
             os.makedirs(directory)
+        
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.grayvalues()[1][index]
+            reconstructed_relative_intensity = self.curve_fft(relative_intensity)
+            off_ax_position_cm = np.arange(-len(reconstructed_relative_intensity) / 2, len(reconstructed_relative_intensity) / 2) * self.pixel_converter[0] / 10
+
+            # Set a tolerance value for plateau detection (adjust as needed)
+            plateau_tolerance = 0.02
+
+            # Find the center of the plateau
+            plateau_center_index = self.find_plateau_center(reconstructed_relative_intensity, tolerance=plateau_tolerance)
+
+            # Set the center point of the plot to be the plateau center position
+            center_offset_cm = off_ax_position_cm[plateau_center_index]
+            ax_range = 25  # Set the range of the x-axis in centimeters
+
             fig, ax = plt.subplots()
-            ax.plot(relative_intensity, color="black", linewidth="0.5")
+            palette = sns.color_palette("colorblind")
+            ax.plot(off_ax_position_cm - center_offset_cm, reconstructed_relative_intensity, color=palette[2], linewidth="0.5")
             ax.minorticks_on()
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
-            ax.set_ylabel("Percentage depth dose [-]", fontsize=16)
-            ax.set_xlabel("Distance [pixel]", fontsize=16)
+            ax.set_ylabel("Relative dose [-]", fontsize=16)
+            ax.set_xlabel("Off axis distance [cm]", fontsize=16)
+            ax.set_xlim(-ax_range, ax_range)
+
             numbers = "".join(filter(str.isdigit, self.energy))
             text = "".join(filter(str.isalpha, self.energy))
             ax.text(x=3, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
+
             plt.savefig("{0}/{1}.png".format(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=300)
             plt.close(fig)
-
-            coeff_dft = scipy.fft.dct(relative_intensity, norm="ortho")
-            two_percent = int(0.04 * len(coeff_dft))
-            dct_thresholded = coeff_dft.copy()
-            dct_thresholded[two_percent:] = 0
-            reconstructed_prices_2_dct = scipy.fft.idct(dct_thresholded, norm="ortho")
-            # Tracer le spectre de fréquence de Fourier
-            fig = plt.subplots(figsize=(16,8))
-            plt.plot(reconstructed_prices_2_dct, linestyle="solid")
-            plt.title("Spectre de fréquence à la suite de la transformée de Fourier Directe", fontsize=20, y=-0.2)
-            plt.xlabel("Fréquence [-]", fontsize=16, loc='right')
-            plt.ylabel("Amplitude [-]", fontsize=16, loc='top')
-            plt.minorticks_on()
-            plt.show()
 
 date = "2023-06-27"
 energy = "6MV"

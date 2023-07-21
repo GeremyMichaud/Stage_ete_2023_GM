@@ -91,7 +91,7 @@ class ImproveData:
         for count, raw_image in enumerate(self.raw_images):
             cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), raw_image)
 
-    def improve_data(self):
+    def improve_data(self, straight=False):
         """Améliore les images en supprimant l'arrière-plan et les redressant.
         Les images améliorées sont enregistrées dans un répertoire 'Improved_Data'.
         """
@@ -100,5 +100,7 @@ class ImproveData:
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        for count, improved_image in enumerate(self.straighten_image()):
+        images = self.straighten_image() if straight else self.remove_background()
+
+        for count, improved_image in enumerate(images):
             cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), improved_image)
