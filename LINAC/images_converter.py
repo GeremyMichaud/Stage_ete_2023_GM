@@ -127,11 +127,13 @@ class Converter:
             calib_image_index (int): L'indice de l'image de calibration à montrer dans l'ordre qu'elle est dans le fichier d'origine.
         """
         corners = self.convert_pixel2mm(calib_image_index)[3]
-        target_square_corner = corners[target_square_index]
+        target_square_corner1 = corners[target_square_index]
+        target_square_corner2 = corners[target_square_index+1]
         central_axis = self.central_axis()[calib_image_index]
 
         # Extraire les coordonnées du coin cible
-        x, y = target_square_corner.ravel().astype(int)
+        x1, y1 = target_square_corner1.ravel().astype(int)
+        x2, y2 = target_square_corner2.ravel().astype(int)
 
         # Normaliser l'image de 16 bits à une plage de 0-255 (8 bits)
         normalized_image = cv.normalize(self.convert_fits2png()[calib_image_index], None, 0, 255, cv.NORM_MINMAX, dtype=cv.CV_8U)
@@ -140,7 +142,8 @@ class Converter:
         image_color = cv.cvtColor(normalized_image, cv.COLOR_GRAY2BGR)
 
         # Dessiner un point sur le coin cible
-        cv.circle(image_color, (x, y), 4, (0, 0, 255), -1)
+        cv.circle(image_color, (x1, y1), 4, (0, 0, 255), -1)
+        cv.circle(image_color, (x2, y2), 4, (0, 0, 255), -1)
 
         # Dessiner une ligne verticale sur l'axe central
         cv.line(image_color, (central_axis, 0), (central_axis, image_color.shape[0]), (0, 255, 0), 1)

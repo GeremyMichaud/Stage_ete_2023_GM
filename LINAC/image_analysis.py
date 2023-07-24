@@ -75,8 +75,7 @@ class Profile:
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.grayvalues()[1][index]
             reconstructed_relative_intensity = self.curve_fft(relative_intensity)
-            middle = np.argmin(abs(np.gradient(reconstructed_relative_intensity, 10)))
-            off_ax_position_pix = np.linspace(-middle, len(reconstructed_relative_intensity) - middle, len(reconstructed_relative_intensity))
+            off_ax_position_pix = np.linspace(-len(reconstructed_relative_intensity) / 2, len(reconstructed_relative_intensity) / 2, len(reconstructed_relative_intensity))
             off_ax_position_cm = off_ax_position_pix * self.pixel_converter[0] /10
             fig, ax = plt.subplots()
             palette = sns.color_palette("colorblind")

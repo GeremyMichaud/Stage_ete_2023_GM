@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import glob
 from PIL import Image
 import scipy
+import seaborn as sns
 
 
 class Profile:
@@ -81,31 +82,28 @@ class Profile:
             os.makedirs(directory)
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.grayvalues()[1][index]
+            # Calcul de la transformée de Fourier discrète (DFT)
+            coeff_dft = np.fft.rfft(relative_intensity)
+            # Calcul du seuil pour conserver les premiers 10% des coefficients
+            dft_thresholded_10 = coeff_dft.copy()
+            ten_percent = int(0.05*len(dft_thresholded_10))
+            # Application du seuil pour ramener à zéro les 90% restants
+            dft_thresholded_10[ten_percent:] = 0
+            reconstructed_data = np.fft.irfft(dft_thresholded_10)
+            off_ax_position_pix = np.linspace(0, len(reconstructed_data), len(reconstructed_data))
+            off_ax_position_cm = off_ax_position_pix * self.pixel_converter[0] /10
             fig, ax = plt.subplots()
-            ax.plot(relative_intensity, color="black", linewidth="0.5")
+            palette = sns.color_palette("colorblind")
+            ax.plot(off_ax_position_cm, reconstructed_data, color=palette[0], linewidth="0.5")
             ax.minorticks_on()
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
             ax.set_ylabel("Percentage depth dose [-]", fontsize=16)
-            ax.set_xlabel("Distance [pixel]", fontsize=16)
+            ax.set_xlabel("Depth [cm]", fontsize=16)
             numbers = "".join(filter(str.isdigit, self.energy))
             text = "".join(filter(str.isalpha, self.energy))
-            ax.text(x=3, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
+            ax.text(x=20, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
             plt.savefig("{0}/{1}.png".format(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=300)
             plt.close(fig)
-
-            coeff_dft = scipy.fft.dct(relative_intensity, norm="ortho")
-            two_percent = int(0.04 * len(coeff_dft))
-            dct_thresholded = coeff_dft.copy()
-            dct_thresholded[two_percent:] = 0
-            reconstructed_prices_2_dct = scipy.fft.idct(dct_thresholded, norm="ortho")
-            # Tracer le spectre de fréquence de Fourier
-            fig = plt.subplots(figsize=(16,8))
-            plt.plot(reconstructed_prices_2_dct, linestyle="solid")
-            plt.title("Spectre de fréquence à la suite de la transformée de Fourier Directe", fontsize=20, y=-0.2)
-            plt.xlabel("Fréquence [-]", fontsize=16, loc='right')
-            plt.ylabel("Amplitude [-]", fontsize=16, loc='top')
-            plt.minorticks_on()
-            plt.show()
 
 date = "2023-06-27"
 energy = "6MV"
