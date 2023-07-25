@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import glob
-import sys
 
 class Profile:
     def __init__(self, checkerboard, diagonal_square_size, path, energy, calib_image_index=0):
@@ -59,24 +58,30 @@ class Profile:
         reconstructed_data = np.fft.irfft(dft_thresholded_10)
         return reconstructed_data
 
-    def central_axis(self):
-        central_axis = []
-        for improved_image in self.improved_images:
-            img = plt.imread(improved_image)
-            central_axis.append(img[0].size // 2)
-        print(central_axis)
-        return central_axis
+    def central_axis(self, relative_intensity):
+        range_plateau = max(relative_intensity) - 0.2
+        max_index = np.argmax(relative_intensity)
+        left_half = relative_intensity[:max_index]
+        right_half = relative_intensity[max_index + 1:]
+
+        left_point = next((len(left_half) - i - 1 for i, intensity in enumerate(left_half[::-1]) if intensity <= range_plateau), max_index)
+        right_point = next((max_index + i + 1 for i, intensity in enumerate(right_half) if intensity <= range_plateau), max_index)
+
+        median_index = (left_point + right_point) // 2
+        return median_index
 
     def plot_grayvalue_profile(self):
         intensity_profiles = self.grayvalues()[0]
         directory = f"{self.path}/Profile/{self.energy}"
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        os.makedirs(directory, exist_ok=True)
+
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.grayvalues()[1][index]
             reconstructed_relative_intensity = self.curve_fft(relative_intensity)
-            off_ax_position_pix = np.linspace(-len(reconstructed_relative_intensity) / 2, len(reconstructed_relative_intensity) / 2, len(reconstructed_relative_intensity))
+            median_index = self.central_axis(reconstructed_relative_intensity)
+            off_ax_position_pix = np.linspace(- median_index, len(reconstructed_relative_intensity) - median_index, len(reconstructed_relative_intensity))
             off_ax_position_cm = off_ax_position_pix * self.pixel_converter[0] /10
+
             fig, ax = plt.subplots()
             palette = sns.color_palette("colorblind")
             ax.plot(off_ax_position_cm, reconstructed_relative_intensity, color=palette[2], linewidth="0.5")
@@ -85,14 +90,16 @@ class Profile:
             ax.set_ylabel("Relative dose [-]", fontsize=16)
             ax.set_xlabel("Off axis distance [cm]", fontsize=16)
             ax.set_xlim(-5, 5)
+
             numbers = "".join(filter(str.isdigit, self.energy))
             text = "".join(filter(str.isalpha, self.energy))
             ax.text(x=3, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
+
             plt.savefig("{0}/{1}.png".format(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=300)
             plt.close(fig)
 
-date = "2023-06-27"
-energy = "6MV"
+date = "2023-07-10"
+energy = "18MV"
 path = f"Measurements/{date}"
 checkerboard = (7, 10)
 diagonal = 25

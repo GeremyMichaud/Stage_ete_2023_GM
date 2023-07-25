@@ -99,14 +99,15 @@ class Profile:
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
             ax.set_ylabel("Percentage depth dose [-]", fontsize=16)
             ax.set_xlabel("Depth [cm]", fontsize=16)
+            ax.set_xlim(0, 8)
             numbers = "".join(filter(str.isdigit, self.energy))
             text = "".join(filter(str.isalpha, self.energy))
-            ax.text(x=20, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
+            ax.text(x=6, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
             plt.savefig("{0}/{1}.png".format(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=300)
             plt.close(fig)
 
-date = "2023-06-27"
-energy = "6MV"
+date = "2023-07-10"
+energy = "6MeV"
 path = f"Measurements/{date}"
 checkerboard = (7, 10)
 diagonal = 25
