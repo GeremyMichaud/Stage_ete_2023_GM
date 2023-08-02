@@ -1,0 +1,49 @@
+%% Abstract.tex
+%% Copyright 2023 G. Michaud
+%% ctrl+alt+j To find something in the PDF SyncTeX
+
+\documentclass[12pt,french]{article}
+\input{AbstractStructure.tex}
+\bibliography{Cerenkov.bib}
+
+\titreanglais{Optimization of Optical Dosimetry in a Water Phantom by Exploiting Cherenkov Radiation Polarization Imaging}
+
+\premierauteur{Gérémy Michaud$^{1, 2}$}
+\deuxiemeauteur{Émily Cloutier$^{1, 2}$}
+\troisiemeauteur{Anastasiia Pusenkova$^{4}$}
+\quatriemeauteur{Tigran Galstian$^{3, 4}$}
+\cinquiemeauteur{Louis Archambault$^{1, 2}$}
+\sixiemeauteur{Luc Beaulieu$^{1, 2}$}
+
+\abstract{
+
+\noindent\textbf{Introduction: } Cherenkov radiation occurs when a charged particle travels through a dielectric medium at a speed greater than that of light \cite{cerenkovVisibleRadiationProduced1937}.
+This phenomenon generates polarized light, which can be utilized to detect and quantify radiation dose distributions in medical applications such as radiotherapy \cite{ashrafDosimetryFLASHRadiotherapy2020}.
+By using Cherenkov light emitted from the irradiated medium, this promising method allows real-time assessment of dose distribution \cite{jarvisCherenkovVideoImaging2014}.
+Building upon previous research by my research group \cite{cloutierAccurateDoseMeasurements2022, cloutierDirectInwaterRadiation2022},
+this study aims to validate optical dosimetry methods in a water phantom through polarization of Cherenkov radiation while enhancing their precision.
+
+\vspace{7.5pt}
+\noindent\textbf{Methods: } The Cherenkov emission signal is captured using a camera equipped with a charge-coupled device (CCD) image sensor during the irradiation of a water tank with dimensions of
+$15\times 15\times\SI{20}{cm^3}$ by photon and electron beams of varying energies, namely $\SI{6}{MV}$, $\SI{18}{MV}$, $\SI{6}{MeV}$, and $\SI{18}{MeV}$.
+Analysis of Cherenkov radiation polarization is performed using a rotating linear polarizer and an innovative polarization modulator developed by PATQER Photonique.
+This approach allows extraction of the polarized component of the signal, the average polarization angle, and the non-polarized portion of the signal.
+Radiochromic films and data from a treatment planning system are used for reference.
+
+\vspace{7.5pt}
+\noindent\textbf{Results: } The measurements yield the normalized dose profile relative to the maximum irradiation dose ($d_{max}$) and the depth dose profiles (PDD) of the ionizing beam.
+These results confirm the feasibility and relevance of this approach for accurate real-time assessment of dose distribution in radiotherapy.
+
+
+\vspace{7.5pt}
+\noindent\textbf{Conclusion: } Further studies could explore the application of this dosimetric method in clinical scenarios, including evaluating the FLASH effect \cite{ashrafDosimetryFLASHRadiotherapy2020}.
+Moreover, a hybrid approach, combining the advantages of optical dosimetry with other dose measurement modalities, could be developed for comprehensive and precise dose distribution assessment in radiotherapy.
+These prospects pave the way for continuous improvement in treatment techniques and better personalization of cancer treatments for patients.}
+
+
+\begin{document}
+\pagenumbering{Roman}
+\pagestyle{plain}
+\resumeanglais
+\printbibliography
+\end{document}

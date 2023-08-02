@@ -28,12 +28,12 @@
 \usepackage[hyperref=true,sorting=none,style=phys]{biblatex}
 \usepackage[normalem]{ulem}
 \usepackage{graphicx}
-\usepackage[margin=1.6cm]{geometry} 
+\usepackage[margin=2cm]{geometry} 
 \usepackage{hyperref}
 \usepackage{xurl}
 \usepackage{booktabs,multirow,multicol,hhline,array}
 \usepackage{enumitem}
-\usepackage[margin=2cm]{caption}
+\usepackage[margin=3cm]{caption}
 \usepackage[usenames,dvipsnames]{xcolor}
 
 % Modules mathématiques et scientifiques
@@ -47,7 +47,7 @@
 \usepackage[section]{placeins}
 
 
-%  Page d'abstract
+%  Page d'abstract français
 \newcommand*{\resumefrancais}{
 \begingroup
     \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
@@ -69,6 +69,33 @@
 	\vspace{3pt}
 	\noindent$^4$Patqer Photonique Inc., Québec, Canada\\
     \resume
+	\vspace*{\fill}
+	\vfill\null
+	\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\endgroup}
+
+%  Page d'abstract anglais
+\newcommand*{\resumeanglais}{
+\begingroup
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+	\begin{center}
+	{\large\bfseries \titreanglais}
+        \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+	\par\vspace{7.5pt}
+	\textbf{\premierauteur, \deuxiemeauteur, \troisiemeauteur, \quatriemeauteur, \cinquiemeauteur ~et \sixiemeauteur}\par
+	\end{center}
+	\vspace{3pt}
+	$^1$Département de physique, génie physique et d'optique et Centre de recherche sur le cancer, Université Laval, Québec, Canada
+
+	\vspace{3pt}
+	\noindent$^2$Service de physique médicale et de radioprotection, Centre intégré de cancérologie, CHU de Québec-Université Laval et Centre de recherche du CHU de Québec, Québec, Québec, Canada
+	
+	\vspace{3pt}
+	\noindent$^3$Département de physique, génie physique et d'optique et Centre d'optique, photonique et lasers, Université Laval, Québec, Canada
+	
+	\vspace{3pt}
+	\noindent$^4$Patqer Photonique Inc., Québec, Canada\\
+    \abstract
 	\vspace*{\fill}
 	\vfill\null
 	\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
