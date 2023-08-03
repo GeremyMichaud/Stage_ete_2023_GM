@@ -8,7 +8,7 @@ import scipy
 import seaborn as sns
 
 
-class Profile:
+class PDD:
     def __init__(self, checkerboard, diagonal_square_size, path, energy, calib_image_index=0):
         self.improved_images = glob.glob(f"{path}/Improved_Data/{energy}/*")
         calibration_images = glob.glob(f"{path}/Calibration/*")
@@ -112,5 +112,5 @@ path = f"Measurements/{date}"
 checkerboard = (7, 10)
 diagonal = 25
 
-profil = Profile(checkerboard, diagonal ,path, energy)
+profil = PDD(checkerboard, diagonal ,path, energy)
 profil.plot_grayvalue_profile()

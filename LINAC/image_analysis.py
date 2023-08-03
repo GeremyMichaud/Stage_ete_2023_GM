@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import glob
+import matplotlib.ticker as ticker
 
 class Profile:
     def __init__(self, checkerboard, diagonal_square_size, path, energy, calib_image_index=0):
@@ -75,16 +76,23 @@ class Profile:
         directory = f"{self.path}/Profile/{self.energy}"
         os.makedirs(directory, exist_ok=True)
 
+        film_path = f"Measurements/Data_Emily/Profil{self.energy}_film.txt"
+        film_data = []
+        for data in open(film_path, "r"):
+            film_data.append(data)
+
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.grayvalues()[1][index]
             reconstructed_relative_intensity = self.curve_fft(relative_intensity)
             median_index = self.central_axis(reconstructed_relative_intensity)
             off_ax_position_pix = np.linspace(- median_index, len(reconstructed_relative_intensity) - median_index, len(reconstructed_relative_intensity))
             off_ax_position_cm = off_ax_position_pix * self.pixel_converter[0] /10
+            film_ax_position_cm = np.linspace(off_ax_position_cm[0], off_ax_position_cm[-1], len(film_data))
 
             fig, ax = plt.subplots()
             palette = sns.color_palette("colorblind")
             ax.plot(off_ax_position_cm, reconstructed_relative_intensity, color=palette[2], linewidth="0.5")
+            #ax.plot(film_data)
             ax.minorticks_on()
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
             ax.set_ylabel("Relative dose [-]", fontsize=16)
@@ -98,7 +106,7 @@ class Profile:
             plt.savefig("{0}/{1}.png".format(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=300)
             plt.close(fig)
 
-date = "2023-07-10"
+date = "2023-06-27"
 energy = "18MV"
 path = f"Measurements/{date}"
 checkerboard = (7, 10)
