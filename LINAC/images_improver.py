@@ -1,5 +1,6 @@
 import cv2 as cv
 import numpy as np
+import matplotlib.pyplot as plt
 import os
 import glob
 from images_converter import Converter
@@ -83,6 +84,17 @@ class ImproveData:
             median_dict[prefix] = median_array
         return median_dict
 
+    def plot_colormap(self, colormap_name="viridis"):
+        for image_data in self.radiative_noise().values():
+            fig, ax = plt.subplots()
+            im = ax.imshow(image_data, cmap=colormap_name)
+            cbar = plt.colorbar(im, ax=ax)
+            ax.tick_params(left=False, bottom=False, labelleft = False ,
+                labelbottom = False)
+            cbar.set_label('Gray Value', fontsize=16)
+            fig.tight_layout()
+            plt.show()
+
     def straighten_image(self):
         """Redresse les images en corrigeant la distorsion.
 
@@ -113,7 +125,7 @@ class ImproveData:
         for count, raw_image in enumerate(self.raw_images):
             cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), raw_image)
 
-    def improve_data(self, straight=False, median_filter=False):
+    def improve_data(self, straight=False, median_filter=False, colormap=False):
         """Améliore les images en supprimant l'arrière-plan et les redressant.
         Les images améliorées sont enregistrées dans un répertoire 'Improved_Data'.
         """
@@ -128,6 +140,8 @@ class ImproveData:
             for name, improved_image in images.items():
                 if median_filter:
                     improved_image = cv.medianBlur(improved_image, ksize=3)
+                elif colormap:
+                    self.plot_colormap()
                 cv.imwrite("{0}/{1}.png".format(directory, name), improved_image)
 
         else:

@@ -29,7 +29,7 @@ if __name__ == "__main__":
     except FileNotFoundError as e:
         print(e)
 
-    improved.improve_data()
+    improved.improve_data(colormap=True)
     improved.see_raw_images()
 
     # Appeler les méthodes de calibration de la caméra
