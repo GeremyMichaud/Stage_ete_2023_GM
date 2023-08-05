@@ -1,4 +1,5 @@
 import cv2 as cv
+import numpy as np
 import os
 import glob
 from images_converter import Converter
@@ -16,17 +17,17 @@ class ImproveData:
             energy (str): Nom de l'énergie des images.
         """
         raw_images = glob.glob(f"{path}/{energy}/*")
-        background = glob.glob(f"{path}/Background/*")
+        backgrounds = glob.glob(f"{path}/Background/*")
         calibration_images = glob.glob(f"{path}/Calibration/*")
 
         self.calibrator = CameraCalibrator(checkerboard, diagonal_square_size, calibration_images)
         self.raw_images = Converter(raw_images, checkerboard, diagonal_square_size).convert_fits2png()
-        self.background = Converter(background, checkerboard, diagonal_square_size).convert_fits2png()
+        self.backgrounds = Converter(backgrounds, checkerboard, diagonal_square_size).convert_fits2png()
 
         self.path = path
         self.energy = energy
         self.undistorted_images = []
-        self.cleaned_images = []
+        self.cleaned_images = {}
 
     def get_file_names(self):
         """Récupère les noms de fichiers des images.
@@ -53,14 +54,34 @@ class ImproveData:
         Returns:
             list: Liste des images sans l'arrière-plan.
         """
-        for noisy_image in self.raw_images:
+        matrice_bg = np.dstack((self.backgrounds))
+        mean_bg = np.mean(matrice_bg, axis=2).astype(np.uint16)
+        for i, noisy_image in enumerate(self.raw_images):
             # Vérifier que les images ont les mêmes dimensions
-            if noisy_image.shape != self.background[0].shape:
+            if noisy_image.shape != mean_bg.shape:
                 raise ValueError("The images do not have the same dimensions.")
-
             # Soustraction de l'image de background de l'image avec bruit
-            self.cleaned_images.append(cv.absdiff(noisy_image, self.background[0]))
+            cleaned_image = cv.absdiff(noisy_image, mean_bg)
+            file_name = self.get_file_names()[i]
+            self.cleaned_images[file_name] = cleaned_image
         return self.cleaned_images
+
+    def radiative_noise(self):
+        backgroundless = self.remove_background()
+        prefix_dict = {}
+        for filename in backgroundless.keys():
+            parts = filename.split("_")
+            if parts[0] not in prefix_dict:
+                prefix_dict[parts[0]] = []
+            prefix_dict[parts[0]].append(filename)
+
+        # Calculer la médiane pour chaque clé dans le dictionnaire
+        median_dict = {}
+        for prefix, filenames in prefix_dict.items():
+            arrays_to_median = [backgroundless[filename] for filename in filenames]
+            median_array = np.median(arrays_to_median, axis=0).astype(arrays_to_median[0].dtype)
+            median_dict[prefix] = median_array
+        return median_dict
 
     def straighten_image(self):
         """Redresse les images en corrigeant la distorsion.
@@ -83,6 +104,7 @@ class ImproveData:
     def see_raw_images(self):
         """Enregistre les images brute dans un répertoire 'Raw_Data'.
         """
+        self.radiative_noise()
         directory = f"{self.path}/Raw_Data/{self.energy}"
 
         if not os.path.exists(directory):
@@ -91,7 +113,7 @@ class ImproveData:
         for count, raw_image in enumerate(self.raw_images):
             cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), raw_image)
 
-    def improve_data(self, straight=False):
+    def improve_data(self, straight=False, median_filter=False):
         """Améliore les images en supprimant l'arrière-plan et les redressant.
         Les images améliorées sont enregistrées dans un répertoire 'Improved_Data'.
         """
@@ -100,7 +122,14 @@ class ImproveData:
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        images = self.straighten_image() if straight else self.remove_background()
+        images = self.straighten_image() if straight else self.radiative_noise()
 
-        for count, improved_image in enumerate(images):
-            cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), improved_image)
+        if isinstance(images, dict):
+            for name, improved_image in images.items():
+                if median_filter:
+                    improved_image = cv.medianBlur(improved_image, ksize=3)
+                cv.imwrite("{0}/{1}.png".format(directory, name), improved_image)
+
+        else:
+            for count, improved_image in enumerate(images):
+                cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), improved_image)

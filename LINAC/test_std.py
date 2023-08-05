@@ -4,7 +4,7 @@ import glob
 import matplotlib.pyplot as plt
 
 
-def draw_rectangle(image, width=50, height=30, color=(0, 255, 0), thickness=2, y_offset=-100):
+def draw_rectangle(image, width=50, height=30, color=(0, 0, 255), thickness=2, y_offset=-100):
     image_height, image_width = image.shape[:2]
     mid_x, mid_y = image_width // 2, image_height // 2 + y_offset
     half_width = width // 2
@@ -28,16 +28,17 @@ def draw_rectangle(image, width=50, height=30, color=(0, 255, 0), thickness=2, y
 
 if __name__ == "__main__":
     # Use glob to get all image paths
-    image_paths = glob.glob('Measurements/2023-07-10/Improved_Data/18MV/unpol_15sec_*.png')
+    image_paths = glob.glob('Measurements/2023-07-10/Raw_Data/18MV/unpol_15sec_*.png')
 
     # Load the images using OpenCV
     images = [cv.imread(path, cv.IMREAD_UNCHANGED) for path in image_paths]
+    draw_image = cv.imread('Measurements/2023-07-10/Improved_Data/18MV/unpol.png', cv.IMREAD_UNCHANGED)
 
     if not images:
         print("Error: No images found or invalid image format.")
     else:
         # Draw a rectangle on the first image with an upward offset of 20 pixels
-        image_with_rectangle, average_grayscale = draw_rectangle(images[0])
+        image_with_rectangle, average_grayscale = draw_rectangle(draw_image)
 
         # Save the image with the rectangle
         cv.imwrite('Cerenkov/image_with_rectangle.png', image_with_rectangle)
