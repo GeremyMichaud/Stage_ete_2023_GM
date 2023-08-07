@@ -85,15 +85,18 @@ class ImproveData:
         return median_dict
 
     def plot_colormap(self, colormap_name="viridis"):
-        for image_data in self.radiative_noise().values():
-            fig, ax = plt.subplots()
+        for name, image_data in self.radiative_noise().items():
+            _, ax = plt.subplots()
             im = ax.imshow(image_data, cmap=colormap_name)
-            cbar = plt.colorbar(im, ax=ax)
+            cbar = plt.colorbar(im, ax=ax, fraction=0.04, pad=0.04)
             ax.tick_params(left=False, bottom=False, labelleft = False ,
                 labelbottom = False)
             cbar.set_label('Gray Value', fontsize=16)
-            fig.tight_layout()
-            plt.show()
+            ax.text(0.03, 0.98, self.energy, transform=ax.transAxes,
+                fontsize=12, color='black',
+                bbox=dict(facecolor="w", edgecolor='k', boxstyle='round,pad=0.4'))
+            plt.savefig(f"{self.path}/Improved_Data/{self.energy}/colormap_{name}.png",
+                bbox_inches ="tight", dpi=600, transparent=True)
 
     def straighten_image(self):
         """Redresse les images en corrigeant la distorsion.
