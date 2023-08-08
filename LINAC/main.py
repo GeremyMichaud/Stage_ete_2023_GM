@@ -1,6 +1,7 @@
 from camera_calibrator import CameraCalibrator
 from images_converter import Converter
 from images_improver import ImproveData
+from image_analysis import Analysis
 import glob
 
 
@@ -22,6 +23,7 @@ if __name__ == "__main__":
     converter = Converter(calib, CHECKERBOARD, DIAGONALE, path)
     calibrator = CameraCalibrator(CHECKERBOARD, DIAGONALE, calib)
     improved = ImproveData(CHECKERBOARD, DIAGONALE, path, energy)
+    analyse = Analysis(CHECKERBOARD, DIAGONALE, path, energy)
 
     # Vérifier le chemin d'accès
     try:
@@ -41,3 +43,7 @@ if __name__ == "__main__":
     # Appeler les méthodes de conversion de pixel à mm
     #converter.print_pixel2mm_factors(0)
     #converter.calib_show_central_axis(5, 0)
+
+    # Appeler les méthodes d'analyse d'image
+    analyse.plot_profile()
+    analyse.plot_pdd()

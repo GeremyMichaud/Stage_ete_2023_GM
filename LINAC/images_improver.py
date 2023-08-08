@@ -85,6 +85,9 @@ class ImproveData:
         return median_dict
 
     def plot_colormap(self, colormap_name="viridis"):
+        directory = os.path.join(self.path, "Colormap", self.energy)
+        if not os.path.exists(directory):
+                os.makedirs(directory)
         for name, image_data in self.radiative_noise().items():
             _, ax = plt.subplots()
             im = ax.imshow(image_data, cmap=colormap_name)
@@ -95,7 +98,7 @@ class ImproveData:
             ax.text(0.03, 0.98, self.energy, transform=ax.transAxes,
                 fontsize=12, color='black',
                 bbox=dict(facecolor="w", edgecolor='k', boxstyle='round,pad=0.4'))
-            plt.savefig(f"{self.path}/Improved_Data/{self.energy}/colormap_{name}.png",
+            plt.savefig(os.path.join(directory, name),
                 bbox_inches ="tight", dpi=600, transparent=True)
 
     def straighten_image(self):
@@ -120,19 +123,19 @@ class ImproveData:
         """Enregistre les images brute dans un répertoire 'Raw_Data'.
         """
         self.radiative_noise()
-        directory = f"{self.path}/Raw_Data/{self.energy}"
+        directory = os.path.join(self.path, "Raw_Data", self.energy)
 
         if not os.path.exists(directory):
             os.makedirs(directory)
 
         for count, raw_image in enumerate(self.raw_images):
-            cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), raw_image)
+            cv.imwrite(os.path.join(directory, self.get_file_names()[count] + ".png"), raw_image)
 
     def improve_data(self, straight=False, median_filter=False, colormap=False):
         """Améliore les images en supprimant l'arrière-plan et les redressant.
         Les images améliorées sont enregistrées dans un répertoire 'Improved_Data'.
         """
-        directory = f"{self.path}/Improved_Data/{self.energy}"
+        directory = os.path.join(self.path, "Improved_Data", self.energy)
 
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -145,8 +148,8 @@ class ImproveData:
                     improved_image = cv.medianBlur(improved_image, ksize=3)
                 elif colormap:
                     self.plot_colormap()
-                cv.imwrite("{0}/{1}.png".format(directory, name), improved_image)
+                cv.imwrite(os.path.join(directory, name + ".png"), improved_image)
 
         else:
             for count, improved_image in enumerate(images):
-                cv.imwrite("{0}/{1}.png".format(directory, self.get_file_names()[count]), improved_image)
+                cv.imwrite(os.path.join(directory, self.get_file_names()[count] + ".png"), improved_image)

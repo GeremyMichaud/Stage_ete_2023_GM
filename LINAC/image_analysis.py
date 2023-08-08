@@ -1,22 +1,22 @@
 from images_converter import Converter
+import cv2 as cv
 import os
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import glob
-import matplotlib.ticker as ticker
 
-class Profile:
-    def __init__(self, checkerboard, diagonal_square_size, path, energy, calib_image_index=0):
+class Analysis:
+    def __init__(self, checkerboard, diagonal_square_size, path, energy):
         self.improved_images = glob.glob(f"{path}/Improved_Data/{energy}/*")
         calibration_images = glob.glob(f"{path}/Calibration/*")
 
         self.path = path
         self.energy = energy
-        self.folder_path = os.path.join(path, energy)
+        self.folder_path = os.path.join(path, "Improved_Data", energy)
 
         self.pixel_converter = Converter(calibration_images, checkerboard, diagonal_square_size).convert_pixel2mm(
-            calib_image_index)
+            calib_image_index=0)
 
     def get_file_names(self):
         """Récupère les noms de fichiers des images.
@@ -33,20 +33,54 @@ class Profile:
             print(f"Error accessing folder: {e}")
             return []
 
-    def grayvalues(self):
+    def profile_grayvalues(self):
+        interval_size = 30
+        y_offset = 200
         intensity_list = []
         max_value_list =[]
         max_index_list = []
 
         for improved_image in self.improved_images:
             img = plt.imread(improved_image)
-            intensity = np.mean(img, axis=0)
+            height = img.shape[0]
+            central_row = height // 2
+
+            start_line = central_row - interval_size - y_offset
+            end_line = central_row + interval_size - y_offset
+
+            intensity = np.mean(img[start_line:end_line], axis=0)
+            intensity_list.append(list(intensity))
+            max_index = np.argmax(intensity)
+            max_value_list.append(intensity[max_index])
+            max_index_list.append(max_index)
+
+        return intensity_list, max_value_list, max_index_list, start_line, end_line
+
+    def pdd_grayvalues(self):
+        intensity_list = []
+        max_value_list =[]
+        max_index_list = []
+
+        for improved_image in self.improved_images:
+            img = plt.imread(improved_image)
+            intensity = np.mean(img, axis=1)
             intensity_list.append(list(intensity))
             max_index = np.argmax(intensity)
             max_value_list.append(intensity[max_index])
             max_index_list.append(max_index)
 
         return intensity_list, max_value_list, max_index_list
+
+    def plot_interval(self):
+        directory = os.path.join(self.path, "Interval", self.energy)
+        os.makedirs(directory, exist_ok=True)
+
+        for count, image in enumerate(self.improved_images):
+            image_8bit = cv.imread(image)
+            image_8bit[self.grayvalues()[3], :] = [0, 255, 0]
+            image_8bit[self.grayvalues()[4], :] = [0, 255, 0]
+
+            cv.imwrite(os.path.join(directory, self.get_file_names()[count]), image_8bit)
 
     def curve_fft(self, x_data_graph):
         # Calcul de la transformée de Fourier discrète (DFT)
@@ -71,28 +105,31 @@ class Profile:
         median_index = (left_point + right_point) // 2
         return median_index
 
-    def plot_grayvalue_profile(self):
-        intensity_profiles = self.grayvalues()[0]
-        directory = f"{self.path}/Profile/{self.energy}"
+    def plot_profile(self, plot_interval=False):
+        intensity_profiles = self.profile_grayvalues()[0]
+        directory = os.path.join(self.path, "Profile", self.energy)
         os.makedirs(directory, exist_ok=True)
 
         film_path = f"Measurements/Data_Emily/Profil{self.energy}_film.txt"
         film_data = []
-        for data in open(film_path, "r"):
-            film_data.append(data)
+        for data in np.loadtxt(film_path):
+            film_data.append(data / 100)
+
+        if plot_interval:
+                self.plot_interval()
 
         for index, intensity in enumerate(intensity_profiles):
-            relative_intensity = intensity / self.grayvalues()[1][index]
+            relative_intensity = intensity / self.profile_grayvalues()[1][index]
             reconstructed_relative_intensity = self.curve_fft(relative_intensity)
             median_index = self.central_axis(reconstructed_relative_intensity)
             off_ax_position_pix = np.linspace(- median_index, len(reconstructed_relative_intensity) - median_index, len(reconstructed_relative_intensity))
             off_ax_position_cm = off_ax_position_pix * self.pixel_converter[0] /10
-            film_ax_position_cm = np.linspace(off_ax_position_cm[0], off_ax_position_cm[-1], len(film_data))
+            film_ax_position_cm = np.linspace(-6, 6, len(film_data))
 
             fig, ax = plt.subplots()
             palette = sns.color_palette("colorblind")
-            ax.plot(off_ax_position_cm, reconstructed_relative_intensity, color=palette[2], linewidth="0.5")
-            #ax.plot(film_data)
+            ax.plot(off_ax_position_cm, reconstructed_relative_intensity, color=palette[2], linewidth="0.7")
+            #ax.plot(film_ax_position_cm, film_data, color=palette[0], linewidth="0.7")
             ax.minorticks_on()
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
             ax.set_ylabel("Relative dose [-]", fontsize=16)
@@ -103,14 +140,29 @@ class Profile:
             text = "".join(filter(str.isalpha, self.energy))
             ax.text(x=3, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
 
-            plt.savefig("{0}/{1}.png".format(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=300)
+            plt.savefig(os.path.join(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=600)
             plt.close(fig)
 
-date = "2023-06-27"
-energy = "18MV"
-path = f"Measurements/{date}"
-checkerboard = (7, 10)
-diagonal = 25
+    def plot_pdd(self):
+        intensity_profiles = self.pdd_grayvalues()[0]
+        directory = os.path.join(self.path, "PDD", self.energy)
+        os.makedirs(directory, exist_ok=True)
 
-profil = Profile(checkerboard, diagonal ,path, energy)
-profil.plot_grayvalue_profile()
+        for index, intensity in enumerate(intensity_profiles):
+            relative_intensity = intensity / self.pdd_grayvalues()[1][index]
+            reconstructed_data = self.curve_fft(relative_intensity)
+            position_pix = np.linspace(0, len(reconstructed_data), len(reconstructed_data))
+            position_cm = position_pix * self.pixel_converter[0] /10
+
+            fig, ax = plt.subplots()
+            palette = sns.color_palette("colorblind")
+            ax.plot(position_cm, reconstructed_data, color=palette[0], linewidth="0.7")
+            ax.minorticks_on()
+            ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
+            ax.set_ylabel("Percentage depth dose [-]", fontsize=16)
+            ax.set_xlabel("Depth [cm]", fontsize=16)
+            numbers = "".join(filter(str.isdigit, self.energy))
+            text = "".join(filter(str.isalpha, self.energy))
+            ax.text(x=20, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
+            plt.savefig(os.path.join(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=600)
+            plt.close(fig)
