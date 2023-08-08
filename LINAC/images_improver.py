@@ -89,7 +89,7 @@ class ImproveData:
         if not os.path.exists(directory):
                 os.makedirs(directory)
         for name, image_data in self.radiative_noise().items():
-            _, ax = plt.subplots()
+            fig, ax = plt.subplots()
             im = ax.imshow(image_data, cmap=colormap_name)
             cbar = plt.colorbar(im, ax=ax, fraction=0.04, pad=0.04)
             ax.tick_params(left=False, bottom=False, labelleft = False ,
@@ -100,6 +100,7 @@ class ImproveData:
                 bbox=dict(facecolor="w", edgecolor='k', boxstyle='round,pad=0.4'))
             plt.savefig(os.path.join(directory, name),
                 bbox_inches ="tight", dpi=600, transparent=True)
+            plt.close(fig)
 
     def straighten_image(self):
         """Redresse les images en corrigeant la distorsion.
