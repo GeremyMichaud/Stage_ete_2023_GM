@@ -18,7 +18,7 @@ class Analysis:
             energy (str): Image energy name.
         """
         # Initialize image paths for improved images and calibration images
-        self.improved_images = glob.glob(f"{path}/Improved_Data/{energy}/*")
+        self.improved_images = (f"{path}/Improved_Data/{energy}/unpol.png")
         calibration_images = glob.glob(f"{path}/Calibration/*")
 
         self.path = path
@@ -57,59 +57,21 @@ class Analysis:
         max_value_list =[]
         max_index_list = []
 
-        for improved_image in self.improved_images:
-            img = plt.imread(improved_image)
-            height = img.shape[0]
-            central_row = height // 2
+        img = plt.imread(self.improved_images)
+        height = img.shape[0]
+        central_row = height // 2
 
-            start_line = central_row - interval_size - y_offset
-            end_line = central_row + interval_size - y_offset
+        start_line = central_row - interval_size - y_offset
+        end_line = central_row + interval_size - y_offset
 
-            # Calculate the mean intensity along the interval
-            intensity = np.mean(img[start_line:end_line], axis=0)
-            intensity_list.append(list(intensity))
-            max_index = np.argmax(intensity)
-            max_value_list.append(intensity[max_index])
-            max_index_list.append(max_index)
+        # Calculate the mean intensity along the interval
+        intensity = np.mean(img[start_line:end_line], axis=0)
+        intensity_list.append(list(intensity))
+        max_index = np.argmax(intensity)
+        max_value_list.append(intensity[max_index])
+        max_index_list.append(max_index)
 
         return intensity_list, max_value_list, max_index_list, start_line, end_line
-
-    def pdd_grayvalues(self):
-        """Calculate intensity profiles along the vertical axis (percentage depth dose).
-
-        Returns:
-            tuple: Lists of intensity profiles, maximum values, and maximum indices.
-        """
-        intensity_list = []
-        max_value_list =[]
-        max_index_list = []
-
-        for improved_image in self.improved_images:
-            img = plt.imread(improved_image)
-
-            # Calculate the mean intensity along the vertical axis
-            intensity = np.mean(img, axis=1)
-            intensity_list.append(list(intensity))
-            max_index = np.argmax(intensity)
-            max_value_list.append(intensity[max_index])
-            max_index_list.append(max_index)
-
-        return intensity_list, max_value_list, max_index_list
-
-    def plot_interval(self):
-        """Plot intervals of interest on images.
-        """
-        directory = os.path.join(self.path, "Interval", self.energy)
-        os.makedirs(directory, exist_ok=True)
-
-        for count, image in enumerate(self.improved_images):
-            image_8bit = cv.imread(image)
-            # Highlight the interval on the image using green color
-            image_8bit[self.grayvalues()[3], :] = [0, 255, 0]
-            image_8bit[self.grayvalues()[4], :] = [0, 255, 0]
-
-            # Save the modified image with interval markers
-            cv.imwrite(os.path.join(directory, self.get_file_names()[count]), image_8bit)
 
     def curve_fft(self, x_data_graph):
         """Perform Fourier transform and return the reconstructed data after thresholding.
@@ -153,7 +115,7 @@ class Analysis:
         median_index = (left_point + right_point) // 2
         return median_index
 
-    def plot_profile(self, plot_interval=False):
+    def plot_profile(self):
         """Plot intensity profiles along the off-axis direction.
 
         Args:
@@ -168,9 +130,6 @@ class Analysis:
         for data in np.loadtxt(film_path):
             film_data.append(data / 100)
 
-        if plot_interval:
-                self.plot_interval()
-
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.profile_grayvalues()[1][index]
             reconstructed_relative_intensity = self.curve_fft(relative_intensity)
@@ -182,48 +141,27 @@ class Analysis:
             # Create and customize the plot
             fig, ax = plt.subplots()
             palette = sns.color_palette("colorblind")
-            ax.plot(off_ax_position_cm, reconstructed_relative_intensity, color=palette[2], linewidth="0.7")
-            #ax.plot(film_ax_position_cm, film_data, color=palette[0], linewidth="0.7")
+            ax.plot(off_ax_position_cm, reconstructed_relative_intensity, color=palette[2], linewidth="0.9", label="Camera measurement")
+            ax.plot(film_ax_position_cm, film_data, color=palette[4], linewidth="0.9", label="Film reference")
+            ax.legend()
             ax.minorticks_on()
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
             ax.set_ylabel("Relative dose [-]", fontsize=16)
             ax.set_xlabel("Off axis distance [cm]", fontsize=16)
-            ax.set_xlim(-3, 3)
+            ax.set_xlim(-2.5, 2.5)
 
             numbers = "".join(filter(str.isdigit, self.energy))
             text = "".join(filter(str.isalpha, self.energy))
-            ax.text(x=2, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
+            ax.text(x=1.6, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
 
             # Save the plot as an image
-            plt.savefig(os.path.join(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=600)
+            plt.savefig(os.path.join(directory, "with_ref"), bbox_inches="tight", dpi=600)
             plt.close(fig)
 
-    def plot_pdd(self):
-        """Plot Percentage Depth Dose (PDD) profiles.
-        """
-        intensity_profiles = self.pdd_grayvalues()[0]
-        directory = os.path.join(self.path, "PDD", self.energy)
-        os.makedirs(directory, exist_ok=True)
-
-        for index, intensity in enumerate(intensity_profiles):
-            relative_intensity = intensity / self.pdd_grayvalues()[1][index]
-            reconstructed_data = self.curve_fft(relative_intensity)
-            position_pix = np.linspace(0, len(reconstructed_data), len(reconstructed_data))
-            position_cm = position_pix * self.pixel_converter[0] /10
-
-            # Create and customize the plot
-            fig, ax = plt.subplots()
-            palette = sns.color_palette("colorblind")
-            ax.plot(position_cm, reconstructed_data, color=palette[0], linewidth="0.7")
-            ax.minorticks_on()
-            ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
-            ax.set_ylabel("Percentage depth dose [-]", fontsize=16)
-            ax.set_xlabel("Depth [cm]", fontsize=16)
-
-            numbers = "".join(filter(str.isdigit, self.energy))
-            text = "".join(filter(str.isalpha, self.energy))
-            ax.text(x=20, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
-
-            # Save the plot as an image
-            plt.savefig(os.path.join(directory, self.get_file_names()[index]), bbox_inches="tight", dpi=600)
-            plt.close(fig)
+CHECKERBOARD = (7, 10)
+DIAGONALE = 25
+date = "2023-07-10"
+energy = "6MV"
+path = f"Measurements/{date}"
+analyse = Analysis(CHECKERBOARD, DIAGONALE, path, energy)
+analyse.plot_profile()
