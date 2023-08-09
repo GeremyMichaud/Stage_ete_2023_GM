@@ -45,5 +45,5 @@ if __name__ == "__main__":
     #converter.calib_show_central_axis(5, 0)
 
     # Appeler les méthodes d'analyse d'image
-    analyse.plot_profile()
-    analyse.plot_pdd()
+    #analyse.plot_profile()
+    #analyse.plot_pdd()
