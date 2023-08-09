@@ -68,7 +68,15 @@ class ImproveData:
         return self.cleaned_images
 
     def radiative_noise(self):
+        """Calculate the median radiative noise for each image prefix.
+
+        Returns:
+            dict: A dictionary containing median radiative noise arrays for each image prefix.
+        """
+        # Remove background from images
         backgroundless = self.remove_background()
+
+        # Organize filenames by their prefixes
         prefix_dict = {}
         for filename in backgroundless.keys():
             parts = filename.split("_")
@@ -76,18 +84,27 @@ class ImproveData:
                 prefix_dict[parts[0]] = []
             prefix_dict[parts[0]].append(filename)
 
-        # Calculer la médiane pour chaque clé dans le dictionnaire
+        # Calculate median for each prefix
         median_dict = {}
         for prefix, filenames in prefix_dict.items():
             arrays_to_median = [backgroundless[filename] for filename in filenames]
             median_array = np.median(arrays_to_median, axis=0).astype(arrays_to_median[0].dtype)
             median_dict[prefix] = median_array
+
         return median_dict
 
     def plot_colormap(self, colormap_name="viridis"):
+        """Plot colormap images for each prefix using the calculated radiative noise.
+
+        Args:
+            colormap_name (str, optional): Name of the colormap. Defaults to "viridis".
+        """
+        # Define directory to save colormap images
         directory = os.path.join(self.path, "Colormap", self.energy)
         if not os.path.exists(directory):
                 os.makedirs(directory)
+
+        # Generate and save colormap images
         for name, image_data in self.radiative_noise().items():
             fig, ax = plt.subplots()
             im = ax.imshow(image_data, cmap=colormap_name)
@@ -98,6 +115,8 @@ class ImproveData:
             ax.text(0.03, 0.98, self.energy, transform=ax.transAxes,
                 fontsize=12, color='black',
                 bbox=dict(facecolor="w", edgecolor='k', boxstyle='round,pad=0.4'))
+
+            # Save the colormap image with transparency
             plt.savefig(os.path.join(directory, name),
                 bbox_inches ="tight", dpi=600, transparent=True)
             plt.close(fig)
