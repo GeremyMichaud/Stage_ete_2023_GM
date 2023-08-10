@@ -1,22 +1,3 @@
-"""import cv2 as cv
-import numpy as np
-
-# Charger l'image en niveaux de gris 16-bit
-image_beam = cv.imread("Measurements/2023-07-24/Improved_Data/6MV/3.png", cv.IMREAD_UNCHANGED)
-"Measurements/2023-07-10/Improved_Data/18MV/unpol.png"
-
-# Créer un masque pour les pixels à rendre transparents
-mask = np.where(image_beam < 4000, 0, 65535).astype(np.uint16)
-
-# Créer un canal alpha en utilisant le masque
-alpha_channel = mask
-
-# Fusionner l'image originale avec le canal alpha
-image_rgba = cv.merge((image_beam, image_beam, image_beam, alpha_channel))
-
-# Sauvegarder l'image modifiée au format 16-bit PNG
-cv.imwrite("Measurements/2023-07-10/Improved_Data/18MV/image_transparente.png", image_rgba)"""
-
 import cv2 as cv
 import numpy as np
 
@@ -33,13 +14,19 @@ rect_height = 770  # Hauteur du rectangle centré
 # Créer un masque pour les pixels en dehors du rectangle centré
 threshold = 3000
 mask = np.zeros_like(image_beam, dtype=np.uint16)
-mask[center_y - rect_height // 2:center_y + rect_height // 2, center_x - rect_width // 2:center_x + rect_width // 2] = np.where(image_beam[center_y - rect_height // 2:center_y + rect_height // 2, center_x - rect_width // 2:center_x + rect_width // 2] < threshold, 0, 65535).astype(np.uint16)
+mask[center_y - rect_height // 2:center_y + rect_height // 2, center_x - rect_width // 2:center_x + rect_width // 2] = np.where(image_beam[center_y - rect_height // 2:center_y + rect_height // 2,
+    center_x - rect_width // 2:center_x + rect_width // 2] < threshold, 0, image_beam[center_y - rect_height // 2:center_y + rect_height // 2, center_x - rect_width // 2:center_x + rect_width // 2]).astype(np.uint16)
+
+#cv.imwrite("Measurements/2023-07-24/Cube/image_transparente.png", mask)
 
 # Créer un canal alpha en utilisant le masque
 alpha_channel = mask
 
+
+rgb_channel = cv.cvtColor(image_beam, cv.COLOR_GRAY2BGR)
+
 # Fusionner l'image originale avec le canal alpha
-image_rgba = cv.merge((image_beam, image_beam, image_beam, alpha_channel))
+image_rgba = cv.merge((rgb_channel, alpha_channel))
 
 # Sauvegarder l'image modifiée au format 16-bit PNG
 cv.imwrite("Measurements/2023-07-24/Cube/image_transparente.png", image_rgba)
