@@ -13,8 +13,8 @@ if __name__ == "__main__":
     # Définir la date pour extraire les images du dossier correspondant
     #date = input("Enter the date of your data acquision (YYYY-MM-DD):")
     #energy = input("Enter the energy level of your data acquision:")
-    date = "2023-07-10"
-    energy = "6MV"
+    date = "2023-08-15"
+    energy = "6MeV"
     path = f"Measurements/{date}"
 
     calib = glob.glob(f"{path}/Calibration/*")
@@ -45,5 +45,5 @@ if __name__ == "__main__":
     #converter.calib_show_central_axis(5, 0)
 
     # Appeler les méthodes d'analyse d'image
-    #analyse.plot_profile()
-    #analyse.plot_pdd()
+    analyse.plot_profile()
+    analyse.plot_pdd()

@@ -163,10 +163,10 @@ class Analysis:
         directory = os.path.join(self.path, "Profile", self.energy)
         os.makedirs(directory, exist_ok=True)
 
-        film_path = f"Measurements/Data_Emily/Profil{self.energy}_film.txt"
-        film_data = []
-        for data in np.loadtxt(film_path):
-            film_data.append(data / 100)
+        #film_path = f"Measurements/Data_Emily/Profil{self.energy}_film.txt"
+        #film_data = []
+        #for data in np.loadtxt(film_path):
+        #    film_data.append(data / 100)
 
         if plot_interval:
                 self.plot_interval()
@@ -177,7 +177,7 @@ class Analysis:
             median_index = self.central_axis(reconstructed_relative_intensity)
             off_ax_position_pix = np.linspace(- median_index, len(reconstructed_relative_intensity) - median_index, len(reconstructed_relative_intensity))
             off_ax_position_cm = off_ax_position_pix * self.pixel_converter[0] /10
-            film_ax_position_cm = np.linspace(-2.85, 3.15, len(film_data))
+            #film_ax_position_cm = np.linspace(-2.85, 3.15, len(film_data))
 
             # Create and customize the plot
             fig, ax = plt.subplots()
