@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import glob
 
+from scipy.signal import correlate
+
 
 class Analysis:
     def __init__(self, checkerboard, diagonal_square_size, path, energy):
@@ -158,10 +160,38 @@ class Analysis:
             plt.savefig(os.path.join(directory, "with_ref"), bbox_inches="tight", dpi=600)
             plt.close(fig)
 
+    def calculate_curve_difference(self):
+        # Get intensity profiles
+        intensity_profiles, _, _, _, _ = self.profile_grayvalues()
+        film_path = f"Measurements/Data_Emily/Profil{self.energy}_film.txt"
+        film_data = np.loadtxt(film_path) / 100  # Normalize film data
+
+        for intensity in intensity_profiles:
+            relative_intensity = intensity / np.max(intensity)
+            reconstructed_relative_intensity = self.curve_fft(relative_intensity)
+            median_index = self.central_axis(reconstructed_relative_intensity)
+            off_ax_position_pix = np.linspace(-median_index, len(reconstructed_relative_intensity) - median_index, len(reconstructed_relative_intensity))
+            off_ax_position_cm = off_ax_position_pix * self.pixel_converter[0] / 10
+            film_ax_position_cm = np.linspace(-2.85, 3.15, len(film_data))
+
+            # Interpolate the reconstructed curve to match the film data
+            interpolated_reconstructed_curve = np.interp(film_ax_position_cm, off_ax_position_cm, reconstructed_relative_intensity)
+
+            # Calculate the difference between the film data and the interpolated curve
+            curve_difference = np.abs(film_data - interpolated_reconstructed_curve)
+
+            # Calculate the average difference for this curve
+            average_difference = np.mean(curve_difference)
+            standard_deviation = np.std(curve_difference)
+
+        return average_difference, standard_deviation
+
 CHECKERBOARD = (7, 10)
 DIAGONALE = 25
 date = "2023-07-10"
 energy = "6MV"
 path = f"Measurements/{date}"
 analyse = Analysis(CHECKERBOARD, DIAGONALE, path, energy)
-analyse.plot_profile()
+difference = analyse.calculate_curve_difference()
+print(f"Curve Average Difference: {difference[0]:.3e} ± {difference[1]:.3e}")
+#analyse.plot_profile()
