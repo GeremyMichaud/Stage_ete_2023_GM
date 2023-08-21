@@ -53,7 +53,7 @@ class Analysis:
         Returns:
             tuple: Lists of intensity profiles, maximum values, maximum indices, start and end lines.
         """
-        interval_size = 30
+        interval_size = 45
         y_offset = 200
         intensity_list = []
         max_value_list =[]
@@ -174,6 +174,16 @@ class Analysis:
             off_ax_position_cm = off_ax_position_pix * self.pixel_converter[0] / 10
             film_ax_position_cm = np.linspace(-2.85, 3.15, len(film_data))
 
+            # Restrict the data to the interval from -2.5 cm to 2.5 cm
+            mask = (off_ax_position_cm >= -2.5) & (off_ax_position_cm <= 2.5)
+            off_ax_position_cm = off_ax_position_cm[mask]
+            reconstructed_relative_intensity = reconstructed_relative_intensity[mask]
+
+            # Create a mask for film_ax_position_cm and film_data based on the length of position_cm
+            film_mask = (film_ax_position_cm >= -2.5) & (film_ax_position_cm <= 2.5)
+            film_ax_position_cm = film_ax_position_cm[film_mask]
+            film_data = film_data[film_mask]
+
             # Interpolate the reconstructed curve to match the film data
             interpolated_reconstructed_curve = np.interp(film_ax_position_cm, off_ax_position_cm, reconstructed_relative_intensity)
 
@@ -194,4 +204,4 @@ path = f"Measurements/{date}"
 analyse = Analysis(CHECKERBOARD, DIAGONALE, path, energy)
 difference = analyse.calculate_curve_difference()
 print(f"Curve Average Difference: {difference[0]:.3e} ± {difference[1]:.3e}")
-#analyse.plot_profile()
+analyse.plot_profile()

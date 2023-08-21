@@ -98,7 +98,6 @@ class Analysis:
         film_data = []
         for data in np.loadtxt(film_path):
             film_data.append(data)
-            # / 100
 
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.pdd_grayvalues()[1][index]
@@ -127,10 +126,47 @@ class Analysis:
             plt.savefig(os.path.join(directory, "with_ref"), bbox_inches="tight", dpi=600)
             plt.close(fig)
 
+    def calculate_curve_difference(self):
+        # Get intensity profiles
+        intensity_profiles = self.pdd_grayvalues()[0]
+        film_path = f"Measurements/Data_Emily/RP{self.energy}_film.txt"
+        film_data = np.loadtxt(film_path)  # Normalize film data
+
+        for index, intensity in enumerate(intensity_profiles):
+            relative_intensity = intensity / self.pdd_grayvalues()[1][index]
+            reconstructed_data = self.curve_fft(relative_intensity)
+            position_pix = np.linspace(-160, len(reconstructed_data), len(reconstructed_data))
+            position_cm = position_pix * self.pixel_converter[0] /10
+            film_ax_position_cm = np.linspace(-0.55, 20.5, len(film_data))
+
+            # Restrict the data to the interval from 0 cm to 18 cm
+            mask = (position_cm >= 0) & (position_cm <= 18)
+            position_cm = position_cm[mask]
+            reconstructed_data = reconstructed_data[mask]
+
+            # Create a mask for film_ax_position_cm and film_data based on the length of position_cm
+            film_mask = (film_ax_position_cm >= 0) & (film_ax_position_cm <= 18)
+            film_ax_position_cm = film_ax_position_cm[film_mask]
+            film_data = film_data[film_mask]
+
+            # Interpolate the reconstructed curve to match the film data
+            interpolated_reconstructed_curve = np.interp(film_ax_position_cm, position_cm, reconstructed_data)
+
+            # Calculate the difference between the film data and the interpolated curve
+            curve_difference = np.abs(film_data - interpolated_reconstructed_curve)
+
+            # Calculate the average difference for this curve
+            average_difference = np.mean(curve_difference)
+            standard_deviation = np.std(curve_difference)
+
+        return average_difference, standard_deviation
+
 CHECKERBOARD = (7, 10)
 DIAGONALE = 25
 date = "2023-06-27"
 energy = "6MV"
 path = f"Measurements/{date}"
 analyse = Analysis(CHECKERBOARD, DIAGONALE, path, energy)
-analyse.plot_pdd()
+difference = analyse.calculate_curve_difference()
+print(f"Curve Average Difference: {difference[0]:.3e} ± {difference[1]:.3e}")
+#analyse.plot_pdd()
