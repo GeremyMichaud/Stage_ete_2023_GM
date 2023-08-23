@@ -51,21 +51,32 @@ class Analysis:
         Returns:
             tuple: Lists of intensity profiles, maximum values, and maximum indices.
         """
+        interval_size = 20
+        x_offset = 30
         intensity_list = []
         max_value_list =[]
         max_index_list = []
 
         for improved_image in self.improved_images:
             img = plt.imread(improved_image)
+            width = img.shape[1]
+            central_row = width // 2
+
+            start_line = central_row - interval_size - x_offset
+            end_line = central_row + interval_size - x_offset
 
             # Calculate the mean intensity along the vertical axis
-            intensity = np.mean(img, axis=1)
+            img_centered = []
+            for row in img:
+                img_centered.append(row[start_line:end_line])
+
+            intensity = np.mean(img_centered, axis=1)
             intensity_list.append(list(intensity))
             max_index = np.argmax(intensity)
             max_value_list.append(intensity[max_index])
             max_index_list.append(max_index)
 
-        return intensity_list, max_value_list, max_index_list
+        return intensity_list, max_value_list, max_index_list, start_line, end_line
 
     def curve_fft(self, x_data_graph):
         """Perform Fourier transform and return the reconstructed data after thresholding.
@@ -93,64 +104,94 @@ class Analysis:
         intensity_profiles = self.pdd_grayvalues()[0]
         directory = os.path.join(self.path, "PDD", self.energy)
         os.makedirs(directory, exist_ok=True)
+        target_position_cm = 1.5
 
         film_path = f"Measurements/Data_Emily/RP{self.energy}_film.txt"
         film_data = []
         for data in np.loadtxt(film_path):
             film_data.append(data)
+        max_film_index = np.argmax(film_data)
+        film_data_per_cm = max_film_index / target_position_cm
+        film_total_cm = len(film_data) / film_data_per_cm
+        film_position_cm = np.linspace(0, film_total_cm, len(film_data))
 
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.pdd_grayvalues()[1][index]
             reconstructed_data = self.curve_fft(relative_intensity)
-            position_pix = np.linspace(-160, len(reconstructed_data), len(reconstructed_data))
+
+            max_relative_intensity_index = np.argmax(relative_intensity)
+            position_pix = np.linspace(0, len(reconstructed_data), len(reconstructed_data))
             position_cm = position_pix * self.pixel_converter[0] /10
-            film_ax_position_cm = np.linspace(-0.55, 20.5, len(film_data))
+            max_intensity_position_cm = position_cm[max_relative_intensity_index]
+            offset = target_position_cm - max_intensity_position_cm
 
             # Create and customize the plot
             fig, ax = plt.subplots()
             palette = sns.color_palette("colorblind")
-            ax.plot(position_cm, reconstructed_data, color=palette[0], linewidth="0.7", label="Camera measurement")
-            ax.plot(film_ax_position_cm, film_data, color=palette[3], linewidth="0.7", label="Film reference")
+            ax.plot(position_cm + offset, reconstructed_data, color=palette[2], linewidth="0.9", label="Raw Cherenkov")
+            ax.plot(film_position_cm, film_data, color=palette[4], linewidth="0.9", label="Radiochromic Film")
+            plt.axvline(x=target_position_cm, color="black", linestyle=":", linewidth="0.7")
             ax.legend(loc="lower center")
             ax.minorticks_on()
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
             ax.set_ylabel("Percentage depth dose [-]", fontsize=16)
             ax.set_xlabel("Depth [cm]", fontsize=16)
-            ax.set_xlim(0, 18)
+            ax.set_xlim(0, 16)
 
             numbers = "".join(filter(str.isdigit, self.energy))
             text = "".join(filter(str.isalpha, self.energy))
-            ax.text(x=15, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
+            ax.text(x=13, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
 
             # Save the plot as an image
             plt.savefig(os.path.join(directory, "with_ref"), bbox_inches="tight", dpi=600)
             plt.close(fig)
 
+    def plot_interval(self):
+        for image in self.improved_images:
+            img = cv.imread(image)
+            start, end = self.pdd_grayvalues()[3], self.pdd_grayvalues()[4]
+            cv.line(img, (start, 0), (start, img.shape[0]), (0,255, 0), thickness=1)
+            cv.line(img, (end, 0), (end, img.shape[0]), (0,255, 0), thickness=1)
+            cv.imwrite('IGL.png', img)
+            cv.destroyAllWindows()
+
     def calculate_curve_difference(self):
         # Get intensity profiles
         intensity_profiles = self.pdd_grayvalues()[0]
+        target_position_cm = 1.5
         film_path = f"Measurements/Data_Emily/RP{self.energy}_film.txt"
-        film_data = np.loadtxt(film_path)  # Normalize film data
+        film_data = []
+        for data in np.loadtxt(film_path):
+            film_data.append(data)
+        max_film_index = np.argmax(film_data)
+        film_data_per_cm = max_film_index / target_position_cm
+        film_total_cm = len(film_data) / film_data_per_cm
+        film_position_cm = np.linspace(0, film_total_cm, len(film_data))
 
         for index, intensity in enumerate(intensity_profiles):
             relative_intensity = intensity / self.pdd_grayvalues()[1][index]
             reconstructed_data = self.curve_fft(relative_intensity)
-            position_pix = np.linspace(-160, len(reconstructed_data), len(reconstructed_data))
-            position_cm = position_pix * self.pixel_converter[0] /10
-            film_ax_position_cm = np.linspace(-0.55, 20.5, len(film_data))
 
-            # Restrict the data to the interval from 0 cm to 18 cm
-            mask = (position_cm >= 0) & (position_cm <= 18)
-            position_cm = position_cm[mask]
+            max_relative_intensity_index = np.argmax(relative_intensity)
+            position_pix = np.linspace(0, len(reconstructed_data), len(reconstructed_data))
+            position_cm = position_pix * self.pixel_converter[0] /10
+            max_intensity_position_cm = position_cm[max_relative_intensity_index]
+            offset = target_position_cm - max_intensity_position_cm
+            position_centered = position_cm + offset
+
+            # Restrict the data to the interval from 0 cm to 16 cm
+            mask = (position_centered >= 0) & (position_centered <= 16)
+            position_centered = position_centered[mask]
             reconstructed_data = reconstructed_data[mask]
 
-            # Create a mask for film_ax_position_cm and film_data based on the length of position_cm
-            film_mask = (film_ax_position_cm >= 0) & (film_ax_position_cm <= 18)
-            film_ax_position_cm = film_ax_position_cm[film_mask]
+            film_data = np.array(film_data)
+            film_mask = (film_position_cm >= 0) & (film_position_cm <= 16)
+            film_position_cm = film_position_cm[film_mask]
             film_data = film_data[film_mask]
 
             # Interpolate the reconstructed curve to match the film data
-            interpolated_reconstructed_curve = np.interp(film_ax_position_cm, position_cm, reconstructed_data)
+            interpolated_reconstructed_curve = np.interp(film_position_cm, position_centered, reconstructed_data)
+            plt.plot(interpolated_reconstructed_curve)
 
             # Calculate the difference between the film data and the interpolated curve
             curve_difference = np.abs(film_data - interpolated_reconstructed_curve)
@@ -169,4 +210,4 @@ path = f"Measurements/{date}"
 analyse = Analysis(CHECKERBOARD, DIAGONALE, path, energy)
 difference = analyse.calculate_curve_difference()
 print(f"Curve Average Difference: {difference[0]:.3e} ± {difference[1]:.3e}")
-#analyse.plot_pdd()
+analyse.plot_pdd()
