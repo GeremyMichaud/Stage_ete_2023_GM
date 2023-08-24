@@ -128,10 +128,10 @@ class Analysis:
             # Create and customize the plot
             fig, ax = plt.subplots()
             palette = sns.color_palette("colorblind")
-            ax.plot(position_cm + offset, reconstructed_data, color=palette[2], linewidth="0.9", label="Raw Cherenkov")
-            ax.plot(film_position_cm, film_data, color=palette[4], linewidth="0.9", label="Radiochromic Film")
-            plt.axvline(x=target_position_cm, color="black", linestyle=":", linewidth="0.7")
-            ax.legend(loc="lower center")
+            ax.plot(position_cm + offset, reconstructed_data, color=palette[2], linewidth="1.5", label="Raw Cherenkov")
+            ax.plot(film_position_cm, film_data, color=palette[4], linewidth="1.5", label="Radiochromic Film")
+            plt.axvline(x=target_position_cm, color="black", linestyle=":", linewidth="1.2")
+            ax.legend(loc="lower center", fontsize=16)
             ax.minorticks_on()
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
             ax.set_ylabel("Percentage depth dose [-]", fontsize=16)
@@ -150,8 +150,16 @@ class Analysis:
         for image in self.improved_images:
             img = cv.imread(image)
             start, end = self.pdd_grayvalues()[3], self.pdd_grayvalues()[4]
-            cv.line(img, (start, 0), (start, img.shape[0]), (0,255, 0), thickness=1)
-            cv.line(img, (end, 0), (end, img.shape[0]), (0,255, 0), thickness=1)
+            interval_size = 20
+            y_offset = 250
+            height = img.shape[0]
+            central_row = height // 2
+            start_line = central_row - interval_size - y_offset
+            end_line = central_row + interval_size - y_offset
+            cv.line(img, (start, 0), (start, img.shape[0]), (0,255, 0), thickness=2)
+            cv.line(img, (end, 0), (end, img.shape[0]), (0,255, 0), thickness=2)
+            cv.line(img, (0, start_line), (img.shape[1], start_line), (0,255, 0), thickness=2)
+            cv.line(img, (0, end_line), (img.shape[1], end_line), (0,255, 0), thickness=2)
             cv.imwrite('IGL.png', img)
             cv.destroyAllWindows()
 
@@ -208,6 +216,7 @@ date = "2023-06-27"
 energy = "6MV"
 path = f"Measurements/{date}"
 analyse = Analysis(CHECKERBOARD, DIAGONALE, path, energy)
-difference = analyse.calculate_curve_difference()
-print(f"Curve Average Difference: {difference[0]:.3e} ± {difference[1]:.3e}")
+#difference = analyse.calculate_curve_difference()
+#print(f"Curve Average Difference: {difference[0]:.3e} ± {difference[1]:.3e}")
 analyse.plot_pdd()
+#analyse.plot_interval()

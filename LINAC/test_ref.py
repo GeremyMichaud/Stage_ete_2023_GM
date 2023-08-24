@@ -143,9 +143,9 @@ class Analysis:
             # Create and customize the plot
             fig, ax = plt.subplots()
             palette = sns.color_palette("colorblind")
-            ax.plot(off_ax_position_cm, reconstructed_relative_intensity, color=palette[2], linewidth="0.9", label="Raw Cherenkov")
-            ax.plot(film_ax_position_cm, film_data, color=palette[4], linewidth="0.9", label="Radiochromic Film")
-            ax.legend()
+            ax.plot(off_ax_position_cm, reconstructed_relative_intensity, color=palette[2], linewidth="1.5", label="Raw Cherenkov")
+            ax.plot(film_ax_position_cm, film_data, color=palette[4], linewidth="1.5", label="Radiochromic Film")
+            ax.legend(fontsize=16)
             ax.minorticks_on()
             ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
             ax.set_ylabel("Relative dose [-]", fontsize=16)
