@@ -13,8 +13,8 @@ if __name__ == "__main__":
     # Définir la date pour extraire les images du dossier correspondant
     #date = input("Enter the date of your data acquision (YYYY-MM-DD):")
     #energy = input("Enter the energy level of your data acquision:")
-    date = "2023-08-15"
-    energy = "6MeV"
+    date = "2023-06-27"
+    energy = "6MV"
     path = f"Measurements/{date}"
 
     calib = glob.glob(f"{path}/Calibration/*")
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     except FileNotFoundError as e:
         print(e)
 
-    improved.improve_data(colormap=True)
-    improved.see_raw_images()
+    improved.improve_data(radiative_noise=2, colormap=True)
+    #improved.see_raw_images()
 
     # Appeler les méthodes de calibration de la caméra
     #calibrator.print_calib_coeff()
@@ -45,5 +45,5 @@ if __name__ == "__main__":
     #converter.calib_show_central_axis(5, 0)
 
     # Appeler les méthodes d'analyse d'image
-    analyse.plot_profile()
-    analyse.plot_pdd()
+    #analyse.plot_profile()
+    #analyse.plot_pdd()
