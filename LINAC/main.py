@@ -2,6 +2,7 @@ from camera_calibrator import CameraCalibrator
 from images_converter import Converter
 from images_improver import ImproveData
 from image_analysis import Analysis
+from japanese import Japanese
 import glob
 
 
@@ -23,6 +24,7 @@ if __name__ == "__main__":
     converter = Converter(calib, CHECKERBOARD, DIAGONALE, path)
     calibrator = CameraCalibrator(CHECKERBOARD, DIAGONALE, calib)
     improved = ImproveData(CHECKERBOARD, DIAGONALE, path, energy)
+    japan = Japanese(CHECKERBOARD, DIAGONALE, path, energy)
     analyse = Analysis(CHECKERBOARD, DIAGONALE, path, energy)
 
     # Vérifier le chemin d'accès
@@ -31,8 +33,11 @@ if __name__ == "__main__":
     except FileNotFoundError as e:
         print(e)
 
-    improved.improve_data(radiative_noise=2, colormap=True)
+    #improved.improve_data(colormap=True)
     #improved.see_raw_images()
+
+    japan.improve_data()
+    japan.polarizing_component()
 
     # Appeler les méthodes de calibration de la caméra
     #calibrator.print_calib_coeff()
