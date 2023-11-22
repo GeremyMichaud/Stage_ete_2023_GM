@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.cm import ScalarMappable
 from scipy.signal import medfilt2d
 import os
 import glob
@@ -122,10 +123,10 @@ class Japanese:
         for name, image_data in images.items():
             fig, ax = plt.subplots()
             im = ax.imshow(image_data, cmap=colormap_name, vmin=0, vmax=vvmax)
-            cbar = plt.colorbar(im, ax=ax, fraction=0.04, pad=0.04)
+            cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.01)
+            cbar.set_label('Gray Value', fontsize=16)
             ax.tick_params(left=False, bottom=False, labelleft = False ,
                 labelbottom = False)
-            cbar.set_label('Gray Value', fontsize=16)
             ax.text(0.03, 0.98, self.energy, transform=ax.transAxes,
                 fontsize=12, color='black',
                 bbox=dict(facecolor="w", edgecolor='k', boxstyle='round,pad=0.4'))
@@ -151,7 +152,7 @@ class Japanese:
         for name, improved_image in images.items():
             cv.imwrite(os.path.join(directory, name + ".png"), improved_image)
 
-    def polarizing_component(self, colormap_max=3000):
+    def polarizing_component(self, colormap_max=20000):
         directory = os.path.join(self.path, "Japan_Data", self.energy)
 
         if not os.path.exists(directory):
@@ -165,7 +166,22 @@ class Japanese:
 
         polarizing_component_array = np.clip(parallel - perpendicular, 0, None).astype(np.uint16)
 
+        cv.imwrite(os.path.join(directory, "pol_comp.png"), polarizing_component_array)
         polarizing_component = {"pol_comp": polarizing_component_array}
-        print(parallel[0][1390], perpendicular[0][1390], polarizing_component["pol_comp"][0][1390])
-        print(polarizing_component)
         self.plot_colormap(polarizing_component, vvmax=colormap_max)
+        return perpendicular, polarizing_component["pol_comp"]
+
+    def non_polarized(self, colormap_max=20000):
+        directory = os.path.join(self.path, "Japan_Data", self.energy)
+
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        perpendicular = self.polarizing_component()[0]
+        polaring_component = self.polarizing_component()[1]
+
+        nonpolarized_array = np.clip(perpendicular-polaring_component, 0, None).astype(np.uint16)
+
+        cv.imwrite(os.path.join(directory, "non_pol.png"), nonpolarized_array)
+        nonpolarized = {"non_pol": nonpolarized_array}
+        self.plot_colormap(nonpolarized, vvmax=colormap_max)

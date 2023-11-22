@@ -36,8 +36,9 @@ if __name__ == "__main__":
     #improved.improve_data(colormap=True)
     #improved.see_raw_images()
 
-    japan.improve_data()
+    #japan.improve_data()
     japan.polarizing_component()
+    japan.non_polarized()
 
     # Appeler les méthodes de calibration de la caméra
     #calibrator.print_calib_coeff()
