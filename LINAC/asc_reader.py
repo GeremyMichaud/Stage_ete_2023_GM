@@ -1,13 +1,17 @@
 import glob
 import os
-import pandas as pd
-import matplotlib.pyplot as plt
 
 # Specify the folder path where ASC files are located
-folder_path = os.path.join("Measurements", "PDD")
+folder_path = os.path.join("Measurements", "Ion_chamber")
 
 # Get a list of ASC files in the specified folder
-asc_files = glob.glob(folder_path + '/*.asc')
+asc_files = glob.glob(os.path.join(folder_path, '*.asc'))
+
+# Initialize variables for dataset extraction
+in_dataset = False
+dataset_lines = []
+dataset_number = None
+file_name = None
 
 # Loop through each ASC file
 for asc_file in asc_files:
@@ -15,19 +19,14 @@ for asc_file in asc_files:
     with open(asc_file, 'r') as file:
         content = file.readlines()
 
-    # Initialize variables for dataset extraction
-    in_dataset = False
-    dataset_lines = []
-    line_index = 0
-
-    # Loop through each line in the file content using a while loop
-    while line_index < len(content):
-        line = content[line_index]
-
+    # Loop through each line in the file content
+    for line in content:
         # Check if the line starts with "# Measurement number" indicating the beginning of a dataset
         if line.startswith("# Measurement number"):
             in_dataset = True
             dataset_lines = [line]
+            dataset_number = line.split("\t")[-1].strip()
+            file_name = os.path.splitext(os.path.basename(asc_file))[0]
         elif in_dataset:
             # Add the line to the dataset_lines list
             dataset_lines.append(line)
@@ -36,110 +35,40 @@ for asc_file in asc_files:
             if line.endswith(":EOM  # End of Measurement\n"):
                 in_dataset = False
 
-                # Extract the name of the original ASC file (without extension)
-                file_name = os.path.splitext(os.path.basename(asc_file))[0]
+                # Process the dataset content without creating an intermediate file
+                data_points = []
+                dose_data = []
+                constant_axis_data = {0: None, 1: None, 2: None}
+                variable_data = []
+                first_line_value = None
 
-                # Create a new text file for the dataset
-                dataset_number = dataset_lines[0].split("\t")[-1].strip()
-                output_file_path = os.path.join(folder_path, file_name+"_dataset_"+dataset_number+".txt")
+                for dataset_line in dataset_lines:
+                    if dataset_line.startswith('='):
+                        values = [float(val) for val in dataset_line.split()[1:]]
+                        data_points.append(values)
+                        dose_data.append(values[3])
+                        x_value, y_value, z_value = values[:3]
 
-                # Write the dataset content to the new text file
+                        for i, (axis_value, constant_axis_value) in enumerate(zip((x_value, y_value, z_value), constant_axis_data.values())):
+                            if constant_axis_value is None:
+                                constant_axis_data[i] = axis_value
+                            elif axis_value != constant_axis_value:
+                                first_line_value = constant_axis_value
+                                variable_data.append(axis_value)
+                                axis = "XYZ"[i]
+
+                variable_data.insert(0, first_line_value)
+
+                # Determine the directory based on the axis
+                directory = os.path.join(folder_path, "Profile" if axis in ("X", "Y") else "PDD")
+                os.makedirs(directory, exist_ok=True)
+
+                # Write the processed data directly to the output file
+                output_file_path = os.path.join(directory, f"{file_name}_dataset_{dataset_number}_{axis}.txt")
                 with open(output_file_path, 'w') as output_file:
-                    output_file.writelines(dataset_lines)
-
-        # Increment the line index
-        line_index += 1
+                    output_file.write("Axis\tDose\n")
+                    for axis, dose in zip(variable_data, dose_data):
+                        output_file.write(f"{axis}\t{dose}\n")
 
 # Print a message indicating the process is complete
 print("Dataset extraction and file creation completed.")
-
-# Read the data from the file
-file_path = os.path.join("Measurements", "PDD", "6X_DSP90_5x5_dataset_9.txt")
-with open(file_path, 'r') as file:
-    lines = file.readlines()
-
-# Initialize lists to store extracted data
-data_points = []
-dose_data = []
-
-# Open and read the file
-with open(file_path, 'r') as file:
-    # Iterate through each line
-    for line in file:
-        # Check if the line starts with "=" indicating a data point
-        if line.startswith('='):
-            # Split the line into values and convert them to floats
-            values = [float(val) for val in line.split()[1:]]  # Skip the first element containing '='
-            # Append the values to the data_points list
-            data_points.append(values)
-            dose_data.append(values[3])
-
-
-# Initialize lists to store extracted variable and constant axis data
-variable_axis_data = []
-constant_axis_data = {0: None, 1: None, 2: None}
-
-# Open and read the file
-with open(file_path, 'r') as file:
-    # Iterate through each line
-    for line in file:
-        # Check if the line starts with "=" indicating a data point
-        if line.startswith('='):
-            # Split the line into values and convert them to floats
-            values = [float(val) for val in line.split()[1:]]  # Skip the first element containing '='
-
-            # Extract X, Y, Z values
-            x_value, y_value, z_value = values[0], values[1], values[2]
-
-            # Check if X values are constant
-            if constant_axis_data[0] is None:
-                constant_axis_data[0] = x_value
-            elif x_value != constant_axis_data[0]:
-                constant_axis_data[0] = 'Variable'
-            
-            # Check if Y values are constant
-            if constant_axis_data[1] is None:
-                constant_axis_data[1] = y_value
-            elif y_value != constant_axis_data[1]:
-                constant_axis_data[1] = 'Variable'
-            
-            # Check if Z values are constant
-            if constant_axis_data[2] is None:
-                constant_axis_data[2] = z_value
-            elif z_value != constant_axis_data[2]:
-                constant_axis_data[2] = 'Variable'
-
-# Initialize lists to store extracted variable axis data
-variable_data = []
-
-# Open and read the file
-with open(file_path, 'r') as file:
-    # Iterate through each line
-    for line in file:
-        # Check if the line starts with "=" indicating a data point
-        if line.startswith('='):
-            # Split the line into values and convert them to floats
-            values = [float(val) for val in line.split()[1:]]  # Skip the first element containing '='
-
-            # Extract X, Y, Z values
-            x_value, y_value, z_value = values[0], values[1], values[2]
-
-            # Check if X values are variable
-            if constant_axis_data[0] == 'Variable':
-                variable_data.append(x_value)
-                axis = "X"
-
-            # Check if Y values are variable
-            if constant_axis_data[1] == 'Variable':
-                variable_data.append(y_value)
-                axis = "Y"
-
-            # Check if Z values are variable
-            if constant_axis_data[2] == 'Variable':
-                variable_data.append(z_value)
-                axis = "Z"
-
-plt.plot(variable_data, dose_data)
-plt.xlabel(axis)
-plt.ylabel("Dose")
-plt.show()
