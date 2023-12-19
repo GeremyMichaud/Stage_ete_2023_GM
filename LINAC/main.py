@@ -14,8 +14,8 @@ if __name__ == "__main__":
     # Définir la date pour extraire les images du dossier correspondant
     #date = input("Enter the date of your data acquision (YYYY-MM-DD):")
     #energy = input("Enter the energy level of your data acquision:")
-    date = "2023-08-15"
-    energy = "6MeV"
+    date = "2023-07-10"
+    energy = "6MV"
     path = f"Measurements/{date}"
 
     calib = glob.glob(f"{path}/Calibration/*")
