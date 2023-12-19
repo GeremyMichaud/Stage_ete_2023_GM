@@ -284,7 +284,7 @@ class Japanese:
         ax.plot(position_mm, relative_perpendicular, linestyle="dashed", color="red", label="Perpendicular")
         ax.plot(position_mm, relative_polarized, linestyle="dotted", color="green", label="Polarized")
         ax.plot(position_mm, relative_nonpolarized, linestyle="dashdot", color="darkviolet", label="Non-polarized")
-        ax.plot(ion_chamber_depth, ion_chamber_relative_dose, linestyle="solid", color="orange", label="Ionization chamber")
+        ax.plot(ion_chamber_depth, ion_chamber_relative_dose, linestyle=(5,(10,3)), color="orange", label="Ionization chamber")
 
         """ax.plot(position_mm, parallel_fft[0], linestyle="solid", color="blue", label="Parallel")
         ax.plot(position_mm, perpendicular_fft[0], linestyle="dashed", color="red", label="Perpendicular")
