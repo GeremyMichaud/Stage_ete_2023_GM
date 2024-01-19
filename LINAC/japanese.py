@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.signal import medfilt2d
+from scipy.signal import medfilt2d, savgol_filter
 import os
 import glob
 from images_converter import Converter
@@ -227,6 +227,12 @@ class Japanese:
         max_index = np.argmax(reconstructed_data)
         return reconstructed_data, max_value, max_index
 
+    def savgol(self, y_data, wl=21, po=3):
+        y_smooth = savgol_filter(y_data, window_length=wl, polyorder=po, mode="nearest")
+        max_value = np.max(y_smooth)
+        max_index = np.argmax(y_smooth)
+        return y_smooth, max_value, max_index
+
     def plot_pdd(self):
         """Plot Percentage Depth Dose (PDD) profiles.
         """
@@ -257,23 +263,28 @@ class Japanese:
         parallel_path = images[images.index(os.path.join(im_path, "90deg.png"))]
 
         nonpolarized = self.pdd_grayvalues(nonpolarized_path, pix_width)
-        nonpolarized_fft = self.curve_fft(nonpolarized[0])
-        relative_nonpolarized = nonpolarized_fft[0] / nonpolarized_fft[1]
+        nonpolarized_smooth = self.savgol(nonpolarized[0])
+        relative_nonpolarized = nonpolarized_smooth[0] / nonpolarized_smooth[1]
         polarized = self.pdd_grayvalues(polarized_path, pix_width)
-        polarized_fft = self.curve_fft(polarized[0])
-        relative_polarized = polarized_fft[0] / polarized_fft[1]
+        polarized_smooth = self.savgol(polarized[0])
+        relative_polarized = polarized_smooth[0] / polarized_smooth[1]
         perpendicular = self.pdd_grayvalues(perpendicular_path, pix_width)
-        perpendicular_fft = self.curve_fft(perpendicular[0])
-        relative_perpendicular = perpendicular_fft[0] / perpendicular_fft[1]
+        perpendicular_smooth = self.savgol(perpendicular[0])
+        relative_perpendicular = perpendicular_smooth[0] / perpendicular_smooth[1]
         parallel = self.pdd_grayvalues(parallel_path, pix_width)
-        parallel_fft = self.curve_fft(parallel[0])
-        relative_parallel = parallel_fft[0] / parallel_fft[1]
+        parallel_smooth = self.savgol(parallel[0])
+        relative_parallel = parallel_smooth[0] / parallel_smooth[1]
+        
+        """relative_nonpolarized_2 = nonpolarized[0] / np.max(nonpolarized[0])
+        relative_polarized_2 = polarized[0] / np.max(polarized[0])
+        relative_perpendicular_2 = perpendicular[0] / np.max(perpendicular[0])
+        relative_parallel_2 = parallel[0] / np.max(parallel[0])"""
 
         pixel_factor = self.pixel_converter[0]
         pixel_shift = ion_chamber_depth_max / pixel_factor
-        start_pix = -nonpolarized_fft[2] + pixel_shift
-        end_pix = len(nonpolarized_fft[0]) - nonpolarized_fft[2] + pixel_shift
-        position_pix = np.linspace(start_pix, end_pix, len(nonpolarized_fft[0]))
+        start_pix = -nonpolarized_smooth[2] + pixel_shift
+        end_pix = len(nonpolarized_smooth[0]) - nonpolarized_smooth[2] + pixel_shift
+        position_pix = np.linspace(start_pix, end_pix, len(nonpolarized_smooth[0]))
         position_mm = position_pix * pixel_factor
 
         directory = os.path.join(self.path, "Japan_Data", "PDD", self.energy)
@@ -285,11 +296,17 @@ class Japanese:
         ax.plot(position_mm, relative_polarized, linestyle="dotted", color="green", label="Polarized")
         ax.plot(position_mm, relative_nonpolarized, linestyle="dashdot", color="darkviolet", label="Non-polarized")
         ax.plot(ion_chamber_depth, ion_chamber_relative_dose, linestyle=(5,(10,3)), color="orange", label="Ionization chamber")
+        
+        """ax.plot(position_mm, relative_parallel_2, linestyle="solid", color="cyan", label="Parallel_Unsmooth")
+        ax.plot(position_mm, relative_perpendicular_2, linestyle="dashed", color="lightcoral", label="Perpendicular_Unsmooth")
+        ax.plot(position_mm, relative_polarized_2, linestyle="dotted", color="palegreen", label="Polarized_Unsmooth")
+        ax.plot(position_mm, relative_nonpolarized_2, linestyle="dashdot", color="violet", label="Non-polarized_Unsmooth")"""
 
         """ax.plot(position_mm, parallel_fft[0], linestyle="solid", color="blue", label="Parallel")
         ax.plot(position_mm, perpendicular_fft[0], linestyle="dashed", color="red", label="Perpendicular")
         ax.plot(position_mm, polarized_fft[0], linestyle="dotted", color="green", label="Polarized")
         ax.plot(position_mm, nonpolarized_fft[0], linestyle="dashdot", color="darkviolet", label="Non-polarized")"""
+
         ax.minorticks_on()
         ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
         ax.set_ylabel("Relative dose [-]", fontsize=16)
