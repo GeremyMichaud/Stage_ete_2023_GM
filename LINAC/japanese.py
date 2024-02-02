@@ -6,6 +6,7 @@ import os
 import glob
 from images_converter import Converter
 from camera_calibrator import CameraCalibrator
+from imageio import imread
 
 
 class Japanese:
@@ -194,7 +195,7 @@ class Japanese:
         Returns:
             tuple: Lists of intensity profiles, maximum values, and maximum indices.
         """
-        img = plt.imread(image)
+        img = imread(image)
         center_index = img.shape[1] // 2
         img_cut = img[:, center_index - (width // 2):center_index + (width // 2)]
 
@@ -228,6 +229,18 @@ class Japanese:
         return reconstructed_data, max_value, max_index
 
     def savgol(self, y_data, wl=21, po=3):
+        """Smooth (filter) a signal using a Savitzky-Golay filter.
+        The Savitzky-Golay filter removes high frequency noise from data.
+
+        Args:
+            y_data (array-like): The input signal.
+            window_length (int): Window length used for the filtering. Default is 21.
+            polyorder (int): Polynomial order of the polynomial that is used to fit the
+                data. Must be less than window_length/2 - 1. Default is 3.
+
+        Returns:
+            array-like: Smoothed version of the input signal.
+        """
         y_smooth = savgol_filter(y_data, window_length=wl, polyorder=po, mode="nearest")
         max_value = np.max(y_smooth)
         max_index = np.argmax(y_smooth)
@@ -259,8 +272,8 @@ class Japanese:
 
         nonpolarized_path = images[images.index(os.path.join(im_path, "non_pol.png"))]
         polarized_path = images[images.index(os.path.join(im_path, "pol_comp.png"))]
-        perpendicular_path = images[images.index(os.path.join(im_path, "0deg.png"))]
-        parallel_path = images[images.index(os.path.join(im_path, "90deg.png"))]
+        perpendicular_path = images[images.index(os.path.join(im_path, "90deg.png"))]
+        parallel_path = images[images.index(os.path.join(im_path, "0deg.png"))]
 
         nonpolarized = self.pdd_grayvalues(nonpolarized_path, pix_width)
         nonpolarized_smooth = self.savgol(nonpolarized[0])
@@ -316,6 +329,52 @@ class Japanese:
         numbers = "".join(filter(str.isdigit, self.energy))
         text = "".join(filter(str.isalpha, self.energy))
         ax.text(x=20, y=0.9, s="{0} {1}".format(numbers, text), fontsize=14)
+        plt.legend()
+        plt.show()
+        #plt.close(fig)
+
+    def verif_factor(self):
+        im_path = os.path.join(self.path, "Improved_Data", self.energy)
+        images = glob.glob(os.path.join(im_path, "*"))
+        pix_width = 60
+        pix_height = 200
+
+        perpendicular_path = images[images.index(os.path.join(im_path, "90deg.png"))]
+        parallel_path = images[images.index(os.path.join(im_path, "0deg.png"))]
+
+        perpendicular = self.pdd_grayvalues(perpendicular_path, pix_width)
+        perpendicular_smooth = self.savgol(perpendicular[0])
+        parallel = self.pdd_grayvalues(parallel_path, pix_width)
+        parallel_smooth = self.savgol(parallel[0])
+
+        middle = len(perpendicular[0]) // 2
+        roi_parallel = parallel[0][middle-pix_height//2:middle+pix_height//2]
+        roi_perpendicular = perpendicular[0][middle-pix_height//2:middle+pix_height//2]
+        factor_roi = roi_parallel / roi_perpendicular
+        factor = parallel[1] / perpendicular[1]
+        factor_smooth = parallel_smooth[1] / perpendicular_smooth[1]
+        print(f"ROI Factor : \t \t {np.mean(factor_roi):.3f} ± {np.std(factor_roi):.3f}")
+        print(f"Max Factor : \t \t {factor:.3f}")
+        print(f"Smooth  Max Factor : \t {factor_smooth:.3f}")
+
+        directory = os.path.join(self.path, "Japan_Data", "PDD", self.energy)
+        os.makedirs(directory, exist_ok=True)
+
+        fig, ax = plt.subplots()
+        position_pix = np.linspace(0, len(parallel_smooth[0]), len(parallel_smooth[0]))
+
+        ax.plot(position_pix, parallel_smooth[0], linestyle="solid", color="cyan", label="Parallel_Smooth")
+        ax.plot(position_pix, perpendicular_smooth[0], linestyle="dashed", color="lightcoral", label="Perpendicular_Smooth")
+
+        ax.minorticks_on()
+        ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
+        ax.set_ylabel("Gray value [-]", fontsize=16)
+        ax.set_xlabel("Depth [pixel]", fontsize=16)
+
+        numbers = "".join(filter(str.isdigit, self.energy))
+        text = "".join(filter(str.isalpha, self.energy))
+        text_height = parallel_smooth[1] - parallel_smooth[1]/6
+        ax.text(x=20, y=text_height, s="{0} {1}".format(numbers, text), fontsize=14)
         plt.legend()
         plt.show()
         #plt.close(fig)
