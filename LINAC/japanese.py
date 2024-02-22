@@ -161,7 +161,7 @@ class Japanese:
             os.makedirs(directory)
 
         images = self.radiative_noise_remove_outliers()
-        parallel, perpendicular = images["90deg"], images["0deg"]
+        parallel, perpendicular = images["0deg"], images["90deg"]
 
         parallel = parallel.astype(np.int16)
         perpendicular = perpendicular.astype(np.int16)
