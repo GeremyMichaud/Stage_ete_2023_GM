@@ -32,6 +32,16 @@ class Converter:
             self.png_16bit_images_data.append(((fits_image_data - fits_image_data.min()) / (fits_image_data.max() - fits_image_data.min()) * 65535).astype(np.uint16))
         return self.png_16bit_images_data
 
+    def flip_vertical(self):
+        for fits_path in self.images:
+            fits_data = fits.open(fits_path)
+            fits_image_data = fits_data[0].data
+            flipped_image = np.flipud(fits_image_data)
+            fits_data[0].data = flipped_image
+            fits_data.close()  # Fermer le fichier FITS après lecture
+            fits_data.writeto(fits_path, overwrite=True)
+
+
     def verify_file_path(self):
         """Vérifie si le chemin d'accès de fichier existe.
 

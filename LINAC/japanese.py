@@ -20,12 +20,12 @@ class Japanese:
             energy (str): Nom de l'énergie des images.
         """
         raw_images = glob.glob(f"{path}/{energy}/*")
-        backgrounds = glob.glob(f"{path}/Background/*")
+        self.backgrounds_path = glob.glob(f"{path}/Background/*")
         calibration_images = glob.glob(f"{path}/Calibration/*")
 
         self.calibrator = CameraCalibrator(checkerboard, diagonal_square_size, calibration_images)
         self.raw_images = Converter(raw_images, checkerboard, diagonal_square_size).convert_fits2png()
-        self.backgrounds = Converter(backgrounds, checkerboard, diagonal_square_size).convert_fits2png()
+        self.backgrounds = Converter(self.backgrounds_path, checkerboard, diagonal_square_size).convert_fits2png()
         self.pixel_converter = Converter(calibration_images, checkerboard, diagonal_square_size).convert_pixel2mm(
             calib_image_index=0)
 
@@ -59,16 +59,37 @@ class Japanese:
         Returns:
             list: Liste des images sans l'arrière-plan.
         """
-        matrice_bg = np.dstack((self.backgrounds))
-        mean_bg = np.mean(matrice_bg, axis=2).astype(np.uint16)
-        for i, noisy_image in enumerate(self.raw_images):
-            # Vérifier que les images ont les mêmes dimensions
-            if noisy_image.shape != mean_bg.shape:
-                raise ValueError("The images do not have the same dimensions.")
-            # Soustraction de l'image de background de l'image avec bruit
-            cleaned_image = cv.absdiff(noisy_image, mean_bg)
-            file_name = self.get_file_names()[i]
-            self.cleaned_images[file_name] = cleaned_image
+        for bg_index, background_path in enumerate(self.backgrounds_path):
+            bg = self.backgrounds[bg_index]
+            selected_noisy_images = []
+            file_name = os.path.split(background_path)[-1]
+            energy_string = file_name.split("_")[0]
+            angle_string = file_name.split("_")[1]
+            if energy_string == self.energy:
+                for i, name in enumerate(self.get_file_names()):
+                    angle = name.split("_")[0]
+                    if angle == angle_string:
+                        selected_noisy_images.append(i)
+                for noisy_index in selected_noisy_images:
+                    noisy_image = self.raw_images[noisy_index]
+                    cleaned_image = cv.absdiff(noisy_image, bg)
+                    file_name = self.get_file_names()[noisy_index]
+                    self.cleaned_images[file_name] = cleaned_image
+            else:
+                continue
+
+        if len(self.cleaned_images) == 0:
+            print("allo")
+            matrice_bg = np.dstack((self.backgrounds))
+            mean_bg = np.mean(matrice_bg, axis=2).astype(np.uint16)
+            for i, noisy_image in enumerate(self.raw_images):
+                # Vérifier que les images ont les mêmes dimensions
+                if noisy_image.shape != mean_bg.shape:
+                    raise ValueError("The images do not have the same dimensions.")
+                # Soustraction de l'image de background de l'image avec bruit
+                cleaned_image = cv.absdiff(noisy_image, mean_bg)
+                file_name = self.get_file_names()[i]
+                self.cleaned_images[file_name] = cleaned_image
         return self.cleaned_images
 
     def radiative_noise_remove_outliers(self, radius=5, threshold=1000):
@@ -83,6 +104,7 @@ class Japanese:
         """
         # Remove background from images
         backgroundless = self.remove_background()
+        print(backgroundless)
 
         # Organize filenames by their prefixes
         prefix_dict = {}

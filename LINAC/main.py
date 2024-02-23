@@ -14,7 +14,7 @@ if __name__ == "__main__":
     # Définir la date pour extraire les images du dossier correspondant
     #date = input("Enter the date of your data acquision (YYYY-MM-DD):")
     #energy = input("Enter the energy level of your data acquision:")
-    date = "2023-07-10"
+    date = "2024-02-21"
     energy = "6MV"
     path = f"Measurements/{date}"
 
@@ -36,11 +36,11 @@ if __name__ == "__main__":
     #improved.improve_data(colormap=True)
     #improved.see_raw_images()
 
-    #.improve_data()
+    #japan.improve_data()
     #japan.polarizing_component()
     #japan.non_polarized()
-    japan.plot_pdd()
-    japan.verif_factor()
+    #japan.plot_pdd()
+    #japan.verif_factor()
 
     # Appeler les méthodes de calibration de la caméra
     #calibrator.print_calib_coeff()
@@ -51,6 +51,7 @@ if __name__ == "__main__":
     # Appeler les méthodes de conversion de pixel à mm
     #converter.print_pixel2mm_factors(0)
     #converter.calib_show_central_axis(5, 0)
+    #converter.flip_vertical()
 
     # Appeler les méthodes d'analyse d'image
     #analyse.plot_profile()

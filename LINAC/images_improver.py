@@ -125,7 +125,6 @@ class ImproveData:
     def see_raw_images(self):
         """Enregistre les images brute dans un répertoire 'Raw_Data'.
         """
-        self.radiative_noise()
         directory = os.path.join(self.path, "Raw_Data", self.energy)
 
         if not os.path.exists(directory):
