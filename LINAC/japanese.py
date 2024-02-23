@@ -79,7 +79,6 @@ class Japanese:
                 continue
 
         if len(self.cleaned_images) == 0:
-            print("allo")
             matrice_bg = np.dstack((self.backgrounds))
             mean_bg = np.mean(matrice_bg, axis=2).astype(np.uint16)
             for i, noisy_image in enumerate(self.raw_images):
@@ -104,7 +103,6 @@ class Japanese:
         """
         # Remove background from images
         backgroundless = self.remove_background()
-        print(backgroundless)
 
         # Organize filenames by their prefixes
         prefix_dict = {}
@@ -160,7 +158,7 @@ class Japanese:
                 bbox_inches ="tight", dpi=300, transparent=True)
             plt.close(fig)
 
-    def improve_data(self, colormap_max=20000):
+    def improve_data(self, colormap_max=70000):
         """Améliore les images en supprimant l'arrière-plan et en réduisant le bruit radiatif.
         Les images améliorées sont enregistrées dans un répertoire 'Improved_Data'.
         """
@@ -392,6 +390,7 @@ class Japanese:
         ax.tick_params(top=True, right=True, axis="both", which="both", direction='in')
         ax.set_ylabel("Gray value [-]", fontsize=16)
         ax.set_xlabel("Depth [pixel]", fontsize=16)
+        ax.set_xlim(100, 400)
 
         numbers = "".join(filter(str.isdigit, self.energy))
         text = "".join(filter(str.isalpha, self.energy))

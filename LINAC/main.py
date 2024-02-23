@@ -15,7 +15,7 @@ if __name__ == "__main__":
     #date = input("Enter the date of your data acquision (YYYY-MM-DD):")
     #energy = input("Enter the energy level of your data acquision:")
     date = "2024-02-21"
-    energy = "6MV"
+    energy = "12MeV"
     path = f"Measurements/{date}"
 
     calib = glob.glob(f"{path}/Calibration/*")
